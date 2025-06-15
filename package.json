@@ -1,0 +1,20 @@
+{
+  "name": "lambda-pi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "vitest run"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "engines": {
+    "node": "24.1.0",
+    "npm": "11.3.0"
+  },
+  "devDependencies": {
+    "vitest": "3.2.4"
+  }
+}
