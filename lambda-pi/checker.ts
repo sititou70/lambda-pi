@@ -104,6 +104,40 @@ export const typeInferable =
       const natValue = evalCheckable(nat)([]);
       return vapp(propValue)(natValue);
     }
+    if (term[0] === "Eq") {
+      const [_, a, x, y] = term;
+      const aValue = evalCheckable(a)([]);
+      typeCheckable(index)(context)(x)(aValue);
+      typeCheckable(index)(context)(y)(aValue);
+      return ["VStar"];
+    }
+    if (term[0] === "EqElim") {
+      const [_, a, prop, propRefl, x, y, eqaxy] = term;
+      typeCheckable(index)(context)(a)(["VStar"]);
+      const aValue = evalCheckable(a)([]);
+      typeCheckable(index)(context)(prop)([
+        "VPi",
+        aValue,
+        (x: Value) => [
+          "VPi",
+          aValue,
+          (y: Value) => ["VPi", ["VEq", aValue, x, y], () => ["VStar"]],
+        ],
+      ]);
+      const propValue = evalCheckable(prop)([]);
+      typeCheckable(index)(context)(propRefl)([
+        "VPi",
+        aValue,
+        (x: Value) => vapp(vapp(propValue)(x))(x),
+      ]);
+      typeCheckable(index)(context)(x)(aValue);
+      const xValue = evalCheckable(x)([]);
+      typeCheckable(index)(context)(y)(aValue);
+      const yValue = evalCheckable(y)([]);
+      typeCheckable(index)(context)(eqaxy)(["VEq", aValue, xValue, yValue]);
+      const eqaxyValue = evalCheckable(eqaxy)([]);
+      return vapp(vapp(vapp(propValue)(xValue))(yValue))(eqaxyValue);
+    }
 
     return term satisfies never;
   };
@@ -140,6 +174,47 @@ export const typeCheckable =
       typeCheckable(index + 1)(extendedContext)(substitutedExp)(
         typeRet(vfree(["Local", index]))
       );
+      return;
+    }
+    if (term[0] === "Refl" && type[0] === "VEq") {
+      const [_, a, z] = term;
+      const [__, bValue, xValue, yValue] = type;
+      typeCheckable(index)(context)(a)(["VStar"]);
+      const aValue = evalCheckable(a)([]);
+      if (!isEqTermCheckable(quote(0)(aValue))(quote(0)(bValue)))
+        throw {
+          msg: "type mismatch",
+          index,
+          context,
+          term,
+          type,
+          aValue,
+          bValue,
+        };
+
+      typeCheckable(index)(context)(z)(aValue);
+      const zValue = evalCheckable(z)([]);
+      if (!isEqTermCheckable(quote(0)(zValue))(quote(0)(xValue)))
+        throw {
+          msg: "type mismatch",
+          index,
+          context,
+          term,
+          type,
+          zValue,
+          xValue,
+        };
+      if (!isEqTermCheckable(quote(0)(zValue))(quote(0)(yValue)))
+        throw {
+          msg: "type mismatch",
+          index,
+          context,
+          term,
+          type,
+          zValue,
+          yValue,
+        };
+
       return;
     }
 

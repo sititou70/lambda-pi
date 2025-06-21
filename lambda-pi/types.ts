@@ -8,9 +8,22 @@ export type TermInferable =
   | ["Nat"]
   | ["NatElim", TermCheckable, TermCheckable, TermCheckable, TermCheckable]
   | ["Zero"]
-  | ["Succ", TermCheckable];
+  | ["Succ", TermCheckable]
+  | ["Eq", TermCheckable, TermCheckable, TermCheckable]
+  | [
+      "EqElim",
+      TermCheckable,
+      TermCheckable,
+      TermCheckable,
+      TermCheckable,
+      TermCheckable,
+      TermCheckable
+    ];
 
-export type TermCheckable = ["Inf", TermInferable] | ["Lam", TermCheckable];
+export type TermCheckable =
+  | ["Inf", TermInferable]
+  | ["Lam", TermCheckable]
+  | ["Refl", TermCheckable, TermCheckable];
 
 export type Name = ["Global", string] | ["Local", number] | ["Quote", number];
 
@@ -21,12 +34,15 @@ export type Value =
   | ["VNat"]
   | ["VZero"]
   | ["VSucc", Value]
+  | ["VEq", Value, Value, Value]
+  | ["VRefl", Value, Value]
   | ["VNeutral", Neutral];
 
 export type Neutral =
   | ["NFree", Name]
   | ["NApp", Neutral, Value]
-  | ["NNatElim", Value, Value, Value, Neutral];
+  | ["NNatElim", Value, Value, Value, Neutral]
+  | ["NEqElim", Value, Value, Value, Value, Value, Neutral];
 
 // utils
 export const isEqName =
@@ -45,6 +61,12 @@ export const isEqTermCheckable =
     }
     if (term1[0] === "Lam" && term2[0] === "Lam") {
       return isEqTermCheckable(term1[1])(term2[1]);
+    }
+    if (term1[0] === "Refl" && term2[0] === "Refl") {
+      return (
+        isEqTermCheckable(term1[1])(term2[1]) &&
+        isEqTermCheckable(term1[2])(term2[2])
+      );
     }
 
     return false;
@@ -96,6 +118,23 @@ export const isEqTermInferable =
     }
     if (term1[0] === "Succ" && term2[0] === "Succ") {
       return isEqTermCheckable(term1[1])(term2[1]);
+    }
+    if (term1[0] === "Eq" && term2[0] === "Eq") {
+      return (
+        isEqTermCheckable(term1[1])(term2[1]) &&
+        isEqTermCheckable(term1[2])(term2[2]) &&
+        isEqTermCheckable(term1[3])(term2[3])
+      );
+    }
+    if (term1[0] === "EqElim" && term2[0] === "EqElim") {
+      return (
+        isEqTermCheckable(term1[1])(term2[1]) &&
+        isEqTermCheckable(term1[2])(term2[2]) &&
+        isEqTermCheckable(term1[3])(term2[3]) &&
+        isEqTermCheckable(term1[4])(term2[4]) &&
+        isEqTermCheckable(term1[5])(term2[5]) &&
+        isEqTermCheckable(term1[6])(term2[6])
+      );
     }
 
     return false;

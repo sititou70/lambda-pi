@@ -37,6 +37,14 @@ export const quote =
       const [_, prev] = value;
       return ["Inf", ["Succ", quote(index)(prev)]];
     }
+    if (value[0] === "VEq") {
+      const [_, a, x, y] = value;
+      return ["Inf", ["Eq", quote(index)(a), quote(index)(x), quote(index)(y)]];
+    }
+    if (value[0] === "VRefl") {
+      const [_, a, z] = value;
+      return ["Refl", quote(index)(a), quote(index)(z)];
+    }
 
     return value satisfies never;
   };
@@ -61,6 +69,18 @@ export const neutralQuote =
         quote(index)(propZero),
         quote(index)(propSucc),
         ["Inf", neutralQuote(index)(nat)],
+      ];
+    }
+    if (neutral[0] === "NEqElim") {
+      const [_, a, prop, propRefl, x, y, eqaxy] = neutral;
+      return [
+        "EqElim",
+        quote(index)(a),
+        quote(index)(prop),
+        quote(index)(propRefl),
+        quote(index)(x),
+        quote(index)(y),
+        ["Inf", neutralQuote(index)(eqaxy)],
       ];
     }
 

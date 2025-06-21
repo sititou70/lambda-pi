@@ -83,6 +83,51 @@ export const evalInferable =
 
       return evaluateResultValue(natVal);
     }
+    if (term[0] === "Eq") {
+      const [_, a, x, y] = term;
+      const aValue = evalCheckable(a)(env);
+      const xValue = evalCheckable(x)(env);
+      const yValue = evalCheckable(y)(env);
+      return ["VEq", aValue, xValue, yValue];
+    }
+    if (term[0] === "EqElim") {
+      const [_, a, prop, propRefl, x, y, eqaxy] = term;
+      const propReflValue = evalCheckable(propRefl)(env);
+      const eqaxyValue = evalCheckable(eqaxy)(env);
+
+      const evaluateResultValue = (eqaxyValue: Value): Value => {
+        if (eqaxyValue[0] === "VRefl") {
+          const [_, eqValue] = eqaxyValue;
+          return vapp(propReflValue)(eqValue);
+        }
+        if (eqaxyValue[0] === "VNeutral") {
+          const [_, eqaxyValueContent] = eqaxyValue;
+          const aValue = evalCheckable(a)(env);
+          const propValue = evalCheckable(prop)(env);
+          const xValue = evalCheckable(x)(env);
+          const yValue = evalCheckable(y)(env);
+          return [
+            "VNeutral",
+            [
+              "NEqElim",
+              aValue,
+              propValue,
+              propReflValue,
+              xValue,
+              yValue,
+              eqaxyValueContent,
+            ],
+          ];
+        }
+
+        throw {
+          msg: "eqElim: invalid eqaxy",
+          eqaxy,
+        };
+      };
+
+      return evaluateResultValue(eqaxyValue);
+    }
 
     return term satisfies never;
   };
@@ -97,6 +142,12 @@ export const evalCheckable =
     if (term[0] === "Lam") {
       const exp = term[1];
       return ["VLam", (arg: Value) => evalCheckable(exp)([arg, ...env])];
+    }
+    if (term[0] === "Refl") {
+      const [_, a, x] = term;
+      const aValue = evalCheckable(a)(env);
+      const xValue = evalCheckable(x)(env);
+      return ["VRefl", aValue, xValue];
     }
 
     return term satisfies never;

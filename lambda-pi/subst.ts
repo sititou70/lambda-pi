@@ -62,6 +62,31 @@ export const substInferable =
       const substitutedPrev = substCheckable(index)(to)(prev);
       return ["Succ", substitutedPrev];
     }
+    if (term[0] === "Eq") {
+      const [_, a, x, y] = term;
+      const substitutedA = substCheckable(index)(to)(a);
+      const substitutedX = substCheckable(index)(to)(x);
+      const substitutedY = substCheckable(index)(to)(y);
+      return ["Eq", substitutedA, substitutedX, substitutedY];
+    }
+    if (term[0] === "EqElim") {
+      const [_, a, prop, propRefl, x, y, eqaxy] = term;
+      const substitutedA = substCheckable(index)(to)(a);
+      const substitutedProp = substCheckable(index)(to)(prop);
+      const substitutedPropRefl = substCheckable(index)(to)(propRefl);
+      const substitutedX = substCheckable(index)(to)(x);
+      const substitutedY = substCheckable(index)(to)(y);
+      const substitutedEqaxy = substCheckable(index)(to)(eqaxy);
+      return [
+        "EqElim",
+        substitutedA,
+        substitutedProp,
+        substitutedPropRefl,
+        substitutedX,
+        substitutedY,
+        substitutedEqaxy,
+      ];
+    }
 
     return term satisfies never;
   };
@@ -79,6 +104,12 @@ export const substCheckable =
       const exp = term[1];
       const substitutedExp = substCheckable(index + 1)(to)(exp);
       return ["Lam", substitutedExp];
+    }
+    if (term[0] === "Refl") {
+      const [_, a, z] = term;
+      const substitutedA = substCheckable(index)(to)(a);
+      const substitutedZ = substCheckable(index)(to)(z);
+      return ["Refl", substitutedA, substitutedZ];
     }
 
     return term satisfies never;

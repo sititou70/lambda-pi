@@ -24,6 +24,12 @@ export const vapp =
     if (v1[0] === "VSucc") {
       throw { msg: "illgal application: v1 is VSucc", v1, v2 };
     }
+    if (v1[0] === "VEq") {
+      throw { msg: "illgal application: v1 is VEq", v1, v2 };
+    }
+    if (v1[0] === "VRefl") {
+      throw { msg: "illgal application: v1 is VRefl", v1, v2 };
+    }
     if (v1[0] === "VNeutral") {
       const neutral = v1[1];
       return ["VNeutral", ["NApp", neutral, v2]];
