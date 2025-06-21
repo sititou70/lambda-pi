@@ -35,6 +35,54 @@ export const evalInferable =
       const exp2 = term[2];
       return vapp(evalInferable(exp1)(env))(evalCheckable(exp2)(env));
     }
+    if (term[0] === "Nat") {
+      return ["VNat"];
+    }
+    if (term[0] === "Zero") {
+      return ["VZero"];
+    }
+    if (term[0] === "Succ") {
+      const [_, prev] = term;
+      return ["VSucc", evalCheckable(prev)(env)];
+    }
+    if (term[0] === "NatElim") {
+      const [_, prop, propZero, propSucc, nat] = term;
+      const natVal = evalCheckable(nat)(env);
+      const propZeroValue = evalCheckable(propZero)(env);
+      const propSuccValue = evalCheckable(propSucc)(env);
+
+      const evaluateResultValue = (natVal: Value): Value => {
+        if (natVal[0] === "VZero") {
+          return propZeroValue;
+        }
+        if (natVal[0] === "VSucc") {
+          const [_, prevNat] = natVal;
+          const prevNatResultValue = evaluateResultValue(prevNat);
+          return vapp(vapp(propSuccValue)(prevNat))(prevNatResultValue);
+        }
+        if (natVal[0] === "VNeutral") {
+          const [_, natValContent] = natVal;
+          const propValue = evalCheckable(prop)(env);
+          return [
+            "VNeutral",
+            [
+              "NNatElim",
+              propValue,
+              propZeroValue,
+              propSuccValue,
+              natValContent,
+            ],
+          ];
+        }
+
+        throw {
+          msg: "natElim: invalid nat",
+          nat,
+        };
+      };
+
+      return evaluateResultValue(natVal);
+    }
 
     return term satisfies never;
   };

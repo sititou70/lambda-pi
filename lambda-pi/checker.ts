@@ -9,7 +9,7 @@ import {
   TermInferable,
   Value,
 } from "./types";
-import { vfree } from "./utils";
+import { vapp, vfree } from "./utils";
 
 export type Type = Value;
 
@@ -74,6 +74,35 @@ export const typeInferable =
       typeCheckable(index)(context)(exp2)(inferredExp1ArgType);
       const evaluatedExp2 = evalCheckable(exp2)([]);
       return inferredExp1RetType(evaluatedExp2);
+    }
+    if (term[0] === "Nat") {
+      return ["VStar"];
+    }
+    if (term[0] === "Zero") {
+      return ["VNat"];
+    }
+    if (term[0] === "Succ") {
+      const [_, prev] = term;
+      typeCheckable(index)(context)(prev);
+      return ["VNat"];
+    }
+    if (term[0] === "NatElim") {
+      const [_, prop, propZero, propSucc, nat] = term;
+      typeCheckable(index)(context)(prop)(["VPi", ["VNat"], () => ["VStar"]]);
+      const propValue = evalCheckable(prop)([]);
+      typeCheckable(index)(context)(propZero)(vapp(propValue)(["VZero"]));
+      typeCheckable(index)(context)(propSucc)([
+        "VPi",
+        ["VNat"],
+        (nat: Value) => [
+          "VPi",
+          vapp(propValue)(nat),
+          () => vapp(propValue)(["VSucc", nat]),
+        ],
+      ]);
+      typeCheckable(index)(context)(nat)(["VNat"]);
+      const natValue = evalCheckable(nat)([]);
+      return vapp(propValue)(natValue);
     }
 
     return term satisfies never;

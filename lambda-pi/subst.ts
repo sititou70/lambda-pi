@@ -37,6 +37,31 @@ export const substInferable =
       const substitutedExp2 = substCheckable(index)(to)(exp2);
       return [substitutedExp1, ":@:", substitutedExp2];
     }
+    if (term[0] === "Nat") {
+      return ["Nat"];
+    }
+    if (term[0] === "NatElim") {
+      const [_, prop, propZero, propSucc, nat] = term;
+      const substitutedProp = substCheckable(index)(to)(prop);
+      const substitutedPropZero = substCheckable(index)(to)(propZero);
+      const substitutedPropSucc = substCheckable(index)(to)(propSucc);
+      const substitutedNat = substCheckable(index)(to)(nat);
+      return [
+        "NatElim",
+        substitutedProp,
+        substitutedPropZero,
+        substitutedPropSucc,
+        substitutedNat,
+      ];
+    }
+    if (term[0] === "Zero") {
+      return ["Zero"];
+    }
+    if (term[0] === "Succ") {
+      const [_, prev] = term;
+      const substitutedPrev = substCheckable(index)(to)(prev);
+      return ["Succ", substitutedPrev];
+    }
 
     return term satisfies never;
   };

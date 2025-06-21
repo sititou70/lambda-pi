@@ -15,6 +15,15 @@ export const vapp =
     if (v1[0] === "VPi") {
       throw { msg: "illgal application: v1 is VPi", v1, v2 };
     }
+    if (v1[0] === "VNat") {
+      throw { msg: "illgal application: v1 is VNat", v1, v2 };
+    }
+    if (v1[0] === "VZero") {
+      throw { msg: "illgal application: v1 is VZero", v1, v2 };
+    }
+    if (v1[0] === "VSucc") {
+      throw { msg: "illgal application: v1 is VSucc", v1, v2 };
+    }
     if (v1[0] === "VNeutral") {
       const neutral = v1[1];
       return ["VNeutral", ["NApp", neutral, v2]];

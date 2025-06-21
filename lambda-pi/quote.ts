@@ -27,6 +27,16 @@ export const quote =
       const neutral = value[1];
       return ["Inf", neutralQuote(index)(neutral)];
     }
+    if (value[0] === "VNat") {
+      return ["Inf", ["Nat"]];
+    }
+    if (value[0] === "VZero") {
+      return ["Inf", ["Zero"]];
+    }
+    if (value[0] === "VSucc") {
+      const [_, prev] = value;
+      return ["Inf", ["Succ", quote(index)(prev)]];
+    }
 
     return value satisfies never;
   };
@@ -42,6 +52,16 @@ export const neutralQuote =
       const exp1 = neutral[1];
       const exp2 = neutral[2];
       return [neutralQuote(index)(exp1), ":@:", quote(index)(exp2)];
+    }
+    if (neutral[0] === "NNatElim") {
+      const [_, prop, propZero, propSucc, nat] = neutral;
+      return [
+        "NatElim",
+        quote(index)(prop),
+        quote(index)(propZero),
+        quote(index)(propSucc),
+        ["Inf", neutralQuote(index)(nat)],
+      ];
     }
 
     return neutral satisfies never;
