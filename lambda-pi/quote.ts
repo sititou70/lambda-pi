@@ -5,7 +5,7 @@ export const quote =
   (index: number) =>
   (value: Value): TermCheckable => {
     if (value[0] === "VLam") {
-      const func = value[1];
+      const [_, func] = value;
       return ["Lam", quote(index + 1)(func(vfree(["Quote", index])))];
     }
     if (value[0] === "VStar") {
@@ -53,12 +53,11 @@ export const neutralQuote =
   (index: number) =>
   (neutral: Neutral): TermInferable => {
     if (neutral[0] === "NFree") {
-      const name = neutral[1];
+      const [_, name] = neutral;
       return boundfree(index)(name);
     }
     if (neutral[0] === "NApp") {
-      const exp1 = neutral[1];
-      const exp2 = neutral[2];
+      const [_, exp1, exp2] = neutral;
       return [neutralQuote(index)(exp1), ":@:", quote(index)(exp2)];
     }
     if (neutral[0] === "NNatElim") {
@@ -91,7 +90,7 @@ export const boundfree =
   (index: number) =>
   (name: Name): TermInferable => {
     if (name[0] === "Quote") {
-      const identifier = name[1];
+      const [_, identifier] = name;
       return ["Bound", index - identifier - 1];
     }
 

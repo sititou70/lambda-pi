@@ -7,15 +7,14 @@ export const evalInferable =
   (term: TermInferable) =>
   (env: Env): Value => {
     if (term[0] === "Ann") {
-      const exp = term[1];
+      const [_, exp] = term;
       return evalCheckable(exp)(env);
     }
     if (term[0] === "Star") {
       return ["VStar"];
     }
     if (term[0] === "Pi") {
-      const exp1 = term[1];
-      const exp2 = term[2];
+      const [_, exp1, exp2] = term;
       return [
         "VPi",
         evalCheckable(exp1)(env),
@@ -31,8 +30,7 @@ export const evalInferable =
       return env[identifier];
     }
     if (term[1] === ":@:") {
-      const exp1 = term[0];
-      const exp2 = term[2];
+      const [exp1, _, exp2] = term;
       return vapp(evalInferable(exp1)(env))(evalCheckable(exp2)(env));
     }
     if (term[0] === "Nat") {
@@ -136,11 +134,11 @@ export const evalCheckable =
   (term: TermCheckable) =>
   (env: Env): Value => {
     if (term[0] === "Inf") {
-      const exp = term[1];
+      const [_, exp] = term;
       return evalInferable(exp)(env);
     }
     if (term[0] === "Lam") {
-      const exp = term[1];
+      const [_, exp] = term;
       return ["VLam", (arg: Value) => evalCheckable(exp)([arg, ...env])];
     }
     if (term[0] === "Refl") {

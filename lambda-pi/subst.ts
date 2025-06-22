@@ -5,8 +5,7 @@ export const substInferable =
   (to: TermInferable) =>
   (term: TermInferable): TermInferable => {
     if (term[0] === "Ann") {
-      const exp = term[1];
-      const type = term[2];
+      const [_, exp, type] = term;
       const substitutedExp = substCheckable(index)(to)(exp);
       return ["Ann", substitutedExp, type];
     }
@@ -14,8 +13,7 @@ export const substInferable =
       return ["Star"];
     }
     if (term[0] === "Pi") {
-      const exp1 = term[1];
-      const exp2 = term[2];
+      const [_, exp1, exp2] = term;
       return [
         "Pi",
         substCheckable(index)(to)(exp1),
@@ -31,8 +29,7 @@ export const substInferable =
       return term;
     }
     if (term[1] === ":@:") {
-      const exp1 = term[0];
-      const exp2 = term[2];
+      const [exp1, _, exp2] = term;
       const substitutedExp1 = substInferable(index)(to)(exp1);
       const substitutedExp2 = substCheckable(index)(to)(exp2);
       return [substitutedExp1, ":@:", substitutedExp2];
@@ -96,7 +93,7 @@ export const substCheckable =
   (to: TermInferable) =>
   (term: TermCheckable): TermCheckable => {
     if (term[0] === "Inf") {
-      const exp = term[1];
+      const [_, exp] = term;
       const substitutedExp = substInferable(index)(to)(exp);
       return ["Inf", substitutedExp];
     }

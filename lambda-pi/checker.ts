@@ -24,8 +24,7 @@ export const typeInferable =
   (term: TermInferable): Type => {
     if (term[0] === "Ann") {
       if (DEBUG) console.log(++DEBUG_STEP, "Start: Ann");
-      const exp = term[1];
-      const type = term[2];
+      const [_, exp, type] = term;
       typeCheckable(index)(context)(type)(["VStar"]);
       const evaluetedType = evalCheckable(type)([]);
       typeCheckable(index)(context)(exp)(evaluetedType);
@@ -37,8 +36,7 @@ export const typeInferable =
     }
     if (term[0] === "Pi") {
       if (DEBUG) console.log(++DEBUG_STEP, "Start: Pi");
-      const type = term[1];
-      const body = term[2];
+      const [_, type, body] = term;
       typeCheckable(index)(context)(type)(["VStar"]);
       const evaluetedType = evalCheckable(type)([]);
       const substitutedBody = substCheckable(0)(["Free", ["Local", index]])(
@@ -72,8 +70,7 @@ export const typeInferable =
     }
     if (term[1] === ":@:") {
       if (DEBUG) console.log(++DEBUG_STEP, "Start: :@:");
-      const exp1 = term[0];
-      const exp2 = term[2];
+      const [exp1, _, exp2] = term;
       const inferredExp1Type = typeInferable(index)(context)(exp1);
       if (inferredExp1Type[0] !== "VPi")
         throw { msg: "illigal application", index, context, term };
@@ -169,7 +166,7 @@ export const typeCheckable =
   (type: Type): void => {
     if (term[0] === "Inf") {
       if (DEBUG) console.log(++DEBUG_STEP, "Start: Inf");
-      const exp = term[1];
+      const [_, exp] = term;
       const inferredType = typeInferable(index)(context)(exp);
       if (!isEqTermCheckable(quote(0)(inferredType))(quote(0)(type)))
         throw {
@@ -185,9 +182,8 @@ export const typeCheckable =
     }
     if (term[0] === "Lam" && type[0] === "VPi") {
       if (DEBUG) console.log(++DEBUG_STEP, "Start: Lam");
-      const exp = term[1];
-      const typeArg = type[1];
-      const typeRet = type[2];
+      const [_, exp] = term;
+      const [__, typeArg, typeRet] = type;
       const extendedContext: Context = [
         [["Local", index], typeArg],
         ...context,

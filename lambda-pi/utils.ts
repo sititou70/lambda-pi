@@ -6,7 +6,7 @@ export const vapp =
   (v1: Value) =>
   (v2: Value): Value => {
     if (v1[0] === "VLam") {
-      const func = v1[1];
+      const [_, func] = v1;
       return func(v2);
     }
     if (v1[0] === "VStar") {
@@ -31,7 +31,7 @@ export const vapp =
       throw { msg: "illgal application: v1 is VRefl", v1, v2 };
     }
     if (v1[0] === "VNeutral") {
-      const neutral = v1[1];
+      const [_, neutral] = v1;
       return ["VNeutral", ["NApp", neutral, v2]];
     }
 
