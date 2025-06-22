@@ -1,0 +1,420 @@
+[
+  "Ann",
+  [
+    "Lam",
+    [
+      "Inf",
+      [
+        "NatElim",
+        [
+          "Lam",
+          [
+            "Inf",
+            [
+              "Eq",
+              ["Inf", ["Nat"]],
+              [
+                "Inf",
+                [
+                  [
+                    [
+                      "Ann",
+                      [
+                        "Lam",
+                        [
+                          "Inf",
+                          [
+                            "NatElim",
+                            [
+                              "Lam",
+                              [
+                                "Inf",
+                                ["Pi", ["Inf", ["Nat"]], ["Inf", ["Nat"]]]
+                              ]
+                            ],
+                            ["Lam", ["Inf", ["Bound", 0]]],
+                            [
+                              "Lam",
+                              [
+                                "Lam",
+                                [
+                                  "Lam",
+                                  [
+                                    "Inf",
+                                    [
+                                      "Succ",
+                                      [
+                                        "Inf",
+                                        [
+                                          ["Bound", 1],
+                                          ":@:",
+                                          ["Inf", ["Bound", 0]]
+                                        ]
+                                      ]
+                                    ]
+                                  ]
+                                ]
+                              ]
+                            ],
+                            ["Inf", ["Bound", 0]]
+                          ]
+                        ]
+                      ],
+                      [
+                        "Inf",
+                        [
+                          "Pi",
+                          ["Inf", ["Nat"]],
+                          ["Inf", ["Pi", ["Inf", ["Nat"]], ["Inf", ["Nat"]]]]
+                        ]
+                      ]
+                    ],
+                    ":@:",
+                    ["Inf", ["Bound", 0]]
+                  ],
+                  ":@:",
+                  ["Inf", ["Zero"]]
+                ]
+              ],
+              ["Inf", ["Bound", 0]]
+            ]
+          ]
+        ],
+        ["Refl", ["Inf", ["Nat"]], ["Inf", ["Zero"]]],
+        [
+          "Lam",
+          [
+            "Lam",
+            [
+              "Inf",
+              [
+                [
+                  [
+                    [
+                      [
+                        [
+                          [
+                            "Ann",
+                            [
+                              "Lam",
+                              [
+                                "Lam",
+                                [
+                                  "Lam",
+                                  [
+                                    "Lam",
+                                    [
+                                      "Lam",
+                                      [
+                                        "Lam",
+                                        [
+                                          "Inf",
+                                          [
+                                            [
+                                              "EqElim",
+                                              ["Inf", ["Bound", 5]],
+                                              [
+                                                "Lam",
+                                                [
+                                                  "Lam",
+                                                  [
+                                                    "Lam",
+                                                    [
+                                                      "Inf",
+                                                      [
+                                                        "Pi",
+                                                        [
+                                                          "Inf",
+                                                          [
+                                                            ["Bound", 7],
+                                                            ":@:",
+                                                            [
+                                                              "Inf",
+                                                              ["Bound", 1]
+                                                            ]
+                                                          ]
+                                                        ],
+                                                        [
+                                                          "Inf",
+                                                          [
+                                                            ["Bound", 8],
+                                                            ":@:",
+                                                            [
+                                                              "Inf",
+                                                              ["Bound", 3]
+                                                            ]
+                                                          ]
+                                                        ]
+                                                      ]
+                                                    ]
+                                                  ]
+                                                ]
+                                              ],
+                                              [
+                                                "Lam",
+                                                ["Lam", ["Inf", ["Bound", 0]]]
+                                              ],
+                                              ["Inf", ["Bound", 2]],
+                                              ["Inf", ["Bound", 3]],
+                                              ["Inf", ["Bound", 0]]
+                                            ],
+                                            ":@:",
+                                            ["Inf", ["Bound", 1]]
+                                          ]
+                                        ]
+                                      ]
+                                    ]
+                                  ]
+                                ]
+                              ]
+                            ],
+                            [
+                              "Inf",
+                              [
+                                "Pi",
+                                ["Inf", ["Star"]],
+                                [
+                                  "Inf",
+                                  [
+                                    "Pi",
+                                    [
+                                      "Inf",
+                                      [
+                                        "Pi",
+                                        ["Inf", ["Bound", 0]],
+                                        ["Inf", ["Star"]]
+                                      ]
+                                    ],
+                                    [
+                                      "Inf",
+                                      [
+                                        "Pi",
+                                        ["Inf", ["Bound", 1]],
+                                        [
+                                          "Inf",
+                                          [
+                                            "Pi",
+                                            ["Inf", ["Bound", 2]],
+                                            [
+                                              "Inf",
+                                              [
+                                                "Pi",
+                                                [
+                                                  "Inf",
+                                                  [
+                                                    ["Bound", 2],
+                                                    ":@:",
+                                                    ["Inf", ["Bound", 1]]
+                                                  ]
+                                                ],
+                                                [
+                                                  "Inf",
+                                                  [
+                                                    "Pi",
+                                                    [
+                                                      "Inf",
+                                                      [
+                                                        "Eq",
+                                                        ["Inf", ["Bound", 4]],
+                                                        ["Inf", ["Bound", 1]],
+                                                        ["Inf", ["Bound", 2]]
+                                                      ]
+                                                    ],
+                                                    [
+                                                      "Inf",
+                                                      [
+                                                        ["Bound", 4],
+                                                        ":@:",
+                                                        ["Inf", ["Bound", 2]]
+                                                      ]
+                                                    ]
+                                                  ]
+                                                ]
+                                              ]
+                                            ]
+                                          ]
+                                        ]
+                                      ]
+                                    ]
+                                  ]
+                                ]
+                              ]
+                            ]
+                          ],
+                          ":@:",
+                          ["Inf", ["Nat"]]
+                        ],
+                        ":@:",
+                        [
+                          "Lam",
+                          [
+                            "Inf",
+                            [
+                              "Eq",
+                              ["Inf", ["Nat"]],
+                              ["Inf", ["Succ", ["Inf", ["Bound", 0]]]],
+                              ["Inf", ["Succ", ["Inf", ["Bound", 2]]]]
+                            ]
+                          ]
+                        ]
+                      ],
+                      ":@:",
+                      ["Inf", ["Bound", 1]]
+                    ],
+                    ":@:",
+                    [
+                      "Inf",
+                      [
+                        [
+                          [
+                            "Ann",
+                            [
+                              "Lam",
+                              [
+                                "Inf",
+                                [
+                                  "NatElim",
+                                  [
+                                    "Lam",
+                                    [
+                                      "Inf",
+                                      ["Pi", ["Inf", ["Nat"]], ["Inf", ["Nat"]]]
+                                    ]
+                                  ],
+                                  ["Lam", ["Inf", ["Bound", 0]]],
+                                  [
+                                    "Lam",
+                                    [
+                                      "Lam",
+                                      [
+                                        "Lam",
+                                        [
+                                          "Inf",
+                                          [
+                                            "Succ",
+                                            [
+                                              "Inf",
+                                              [
+                                                ["Bound", 1],
+                                                ":@:",
+                                                ["Inf", ["Bound", 0]]
+                                              ]
+                                            ]
+                                          ]
+                                        ]
+                                      ]
+                                    ]
+                                  ],
+                                  ["Inf", ["Bound", 0]]
+                                ]
+                              ]
+                            ],
+                            [
+                              "Inf",
+                              [
+                                "Pi",
+                                ["Inf", ["Nat"]],
+                                [
+                                  "Inf",
+                                  ["Pi", ["Inf", ["Nat"]], ["Inf", ["Nat"]]]
+                                ]
+                              ]
+                            ]
+                          ],
+                          ":@:",
+                          ["Inf", ["Bound", 1]]
+                        ],
+                        ":@:",
+                        ["Inf", ["Zero"]]
+                      ]
+                    ]
+                  ],
+                  ":@:",
+                  [
+                    "Refl",
+                    ["Inf", ["Nat"]],
+                    ["Inf", ["Succ", ["Inf", ["Bound", 1]]]]
+                  ]
+                ],
+                ":@:",
+                ["Inf", ["Bound", 0]]
+              ]
+            ]
+          ]
+        ],
+        ["Inf", ["Bound", 0]]
+      ]
+    ]
+  ],
+  [
+    "Inf",
+    [
+      "Pi",
+      ["Inf", ["Nat"]],
+      [
+        "Inf",
+        [
+          "Eq",
+          ["Inf", ["Nat"]],
+          [
+            "Inf",
+            [
+              [
+                [
+                  "Ann",
+                  [
+                    "Lam",
+                    [
+                      "Inf",
+                      [
+                        "NatElim",
+                        [
+                          "Lam",
+                          ["Inf", ["Pi", ["Inf", ["Nat"]], ["Inf", ["Nat"]]]]
+                        ],
+                        ["Lam", ["Inf", ["Bound", 0]]],
+                        [
+                          "Lam",
+                          [
+                            "Lam",
+                            [
+                              "Lam",
+                              [
+                                "Inf",
+                                [
+                                  "Succ",
+                                  [
+                                    "Inf",
+                                    [["Bound", 1], ":@:", ["Inf", ["Bound", 0]]]
+                                  ]
+                                ]
+                              ]
+                            ]
+                          ]
+                        ],
+                        ["Inf", ["Bound", 0]]
+                      ]
+                    ]
+                  ],
+                  [
+                    "Inf",
+                    [
+                      "Pi",
+                      ["Inf", ["Nat"]],
+                      ["Inf", ["Pi", ["Inf", ["Nat"]], ["Inf", ["Nat"]]]]
+                    ]
+                  ]
+                ],
+                ":@:",
+                ["Inf", ["Bound", 0]]
+              ],
+              ":@:",
+              ["Inf", ["Zero"]]
+            ]
+          ],
+          ["Inf", ["Bound", 0]]
+        ]
+      ]
+    ]
+  ]
+]

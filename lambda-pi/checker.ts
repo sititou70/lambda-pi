@@ -11,6 +11,9 @@ import {
 } from "./types";
 import { vapp, vfree } from "./utils";
 
+const DEBUG = false;
+let DEBUG_STEP = 0;
+
 export type Type = Value;
 
 export type Context = [Name, Type][];
@@ -20,6 +23,7 @@ export const typeInferable =
   (context: Context) =>
   (term: TermInferable): Type => {
     if (term[0] === "Ann") {
+      if (DEBUG) console.log(++DEBUG_STEP, "Start: Ann");
       const exp = term[1];
       const type = term[2];
       typeCheckable(index)(context)(type)(["VStar"]);
@@ -28,9 +32,11 @@ export const typeInferable =
       return evaluetedType;
     }
     if (term[0] === "Star") {
+      if (DEBUG) console.log(++DEBUG_STEP, "Start: Star");
       return ["VStar"];
     }
     if (term[0] === "Pi") {
+      if (DEBUG) console.log(++DEBUG_STEP, "Start: Pi");
       const type = term[1];
       const body = term[2];
       typeCheckable(index)(context)(type)(["VStar"]);
@@ -52,6 +58,7 @@ export const typeInferable =
       };
     }
     if (term[0] === "Free") {
+      if (DEBUG) console.log(++DEBUG_STEP, "Start: Free");
       const name = term[1];
       const nameAndType = context.find((x) => isEqName(x[0])(name));
       if (nameAndType === undefined)
@@ -64,6 +71,7 @@ export const typeInferable =
       return nameAndType[1];
     }
     if (term[1] === ":@:") {
+      if (DEBUG) console.log(++DEBUG_STEP, "Start: :@:");
       const exp1 = term[0];
       const exp2 = term[2];
       const inferredExp1Type = typeInferable(index)(context)(exp1);
@@ -76,17 +84,21 @@ export const typeInferable =
       return inferredExp1RetType(evaluatedExp2);
     }
     if (term[0] === "Nat") {
+      if (DEBUG) console.log(++DEBUG_STEP, "Start: Nat");
       return ["VStar"];
     }
     if (term[0] === "Zero") {
+      if (DEBUG) console.log(++DEBUG_STEP, "Start: Zero");
       return ["VNat"];
     }
     if (term[0] === "Succ") {
+      if (DEBUG) console.log(++DEBUG_STEP, "Start: Succ");
       const [_, prev] = term;
       typeCheckable(index)(context)(prev);
       return ["VNat"];
     }
     if (term[0] === "NatElim") {
+      if (DEBUG) console.log(++DEBUG_STEP, "Start: NatElim");
       const [_, prop, propZero, propSucc, nat] = term;
       typeCheckable(index)(context)(prop)(["VPi", ["VNat"], () => ["VStar"]]);
       const propValue = evalCheckable(prop)([]);
@@ -105,6 +117,7 @@ export const typeInferable =
       return vapp(propValue)(natValue);
     }
     if (term[0] === "Eq") {
+      if (DEBUG) console.log(++DEBUG_STEP, "Start: Eq");
       const [_, a, x, y] = term;
       const aValue = evalCheckable(a)([]);
       typeCheckable(index)(context)(x)(aValue);
@@ -112,6 +125,7 @@ export const typeInferable =
       return ["VStar"];
     }
     if (term[0] === "EqElim") {
+      if (DEBUG) console.log(++DEBUG_STEP, "Start: EqElim");
       const [_, a, prop, propRefl, x, y, eqaxy] = term;
       typeCheckable(index)(context)(a)(["VStar"]);
       const aValue = evalCheckable(a)([]);
@@ -128,7 +142,13 @@ export const typeInferable =
       typeCheckable(index)(context)(propRefl)([
         "VPi",
         aValue,
-        (x: Value) => vapp(vapp(propValue)(x))(x),
+        // NOTE: 以下の参考実装では、この部分は(z: Value) => vapp(vapp(propValue)(z))(z)である。
+        // しかし、論文の記述ではpropReflの型はforall (z: a). prop z z (Refl a z)なので、(Refl a z)にも適用するように修正する必要がある。
+        // 実際、rocqで検証済みのコードを移植しているproof.basic.test.tsの型検査は修正版の方でパスする。
+        // おそらく参考実装のバグか、設計の違いによるものなので、ここでは修正版の方を採用する。
+        // 参考実装: https://www.andres-loeh.de/LambdaPi/LambdaPi.hs
+        // rocqで検証済みのコード：https://github.com/sititou70/rocq-induction-from-scratch/blob/main/src/basic.v
+        (z: Value) => vapp(vapp(vapp(propValue)(z))(z))(["VRefl", aValue, z]),
       ]);
       typeCheckable(index)(context)(x)(aValue);
       const xValue = evalCheckable(x)([]);
@@ -148,6 +168,7 @@ export const typeCheckable =
   (term: TermCheckable) =>
   (type: Type): void => {
     if (term[0] === "Inf") {
+      if (DEBUG) console.log(++DEBUG_STEP, "Start: Inf");
       const exp = term[1];
       const inferredType = typeInferable(index)(context)(exp);
       if (!isEqTermCheckable(quote(0)(inferredType))(quote(0)(type)))
@@ -163,6 +184,7 @@ export const typeCheckable =
       return;
     }
     if (term[0] === "Lam" && type[0] === "VPi") {
+      if (DEBUG) console.log(++DEBUG_STEP, "Start: Lam");
       const exp = term[1];
       const typeArg = type[1];
       const typeRet = type[2];
@@ -177,6 +199,7 @@ export const typeCheckable =
       return;
     }
     if (term[0] === "Refl" && type[0] === "VEq") {
+      if (DEBUG) console.log(++DEBUG_STEP, "Start: Refl");
       const [_, a, z] = term;
       const [__, bValue, xValue, yValue] = type;
       typeCheckable(index)(context)(a)(["VStar"]);

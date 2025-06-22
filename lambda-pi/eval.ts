@@ -97,8 +97,8 @@ export const evalInferable =
 
       const evaluateResultValue = (eqaxyValue: Value): Value => {
         if (eqaxyValue[0] === "VRefl") {
-          const [_, eqValue] = eqaxyValue;
-          return vapp(propReflValue)(eqValue);
+          const [_, __, reflValue] = eqaxyValue;
+          return vapp(propReflValue)(reflValue);
         }
         if (eqaxyValue[0] === "VNeutral") {
           const [_, eqaxyValueContent] = eqaxyValue;
