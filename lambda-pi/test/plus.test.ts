@@ -1,8 +1,8 @@
 import { describe, expect, test } from "vitest";
-import { typeCheckable, typeInferable } from "./checker";
-import { evalInferable } from "./eval";
-import { quote } from "./quote";
-import { TermCheckable, TermInferable } from "./types";
+import { typeInferable } from "../checker";
+import { evalInferable } from "../eval";
+import { quote } from "../quote";
+import { TermCheckable, TermInferable } from "../types";
 
 const plus: TermCheckable = [
   "Lam",
