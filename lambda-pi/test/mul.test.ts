@@ -2,33 +2,37 @@ import { describe, expect, test } from "vitest";
 import { TermCheckable, TermInferable } from "../types";
 import { typeInferable } from "../checker";
 import { makeNat } from "./makeNat";
+import { annotatedPlus } from "./plus.test";
 import { quote } from "../quote";
 import { evalInferable } from "../eval";
 
-const plus: TermCheckable = [
+const mul: TermCheckable = [
   "Lam",
   [
     "Inf",
     [
       "NatElim",
       // prop
-      [
-        "Lam", // arg: nat
-        ["Inf", ["Pi", ["Inf", ["Nat"]], ["Inf", ["Nat"]]]],
-      ],
+      ["Lam", ["Inf", ["Pi", ["Inf", ["Nat"]], ["Inf", ["Nat"]]]]],
       // propZero
-      ["Lam", ["Inf", ["Bound", 0]]],
+      ["Lam", makeNat(0)],
       // propSucc
       [
         "Lam", // arg: x
         [
           "Lam", // arg: prop x
+          // prop (Succ x)
           [
             "Lam", // arg: y
             [
               "Inf",
               [
-                "Succ",
+                [
+                  annotatedPlus,
+                  ":@:",
+                  ["Inf", ["Bound", 0]], // y
+                ],
+                ":@:",
                 [
                   "Inf",
                   [
@@ -47,27 +51,27 @@ const plus: TermCheckable = [
     ],
   ],
 ];
-const plusType: TermCheckable = [
+const mulType: TermCheckable = [
   "Inf",
   ["Pi", ["Inf", ["Nat"]], ["Inf", ["Pi", ["Inf", ["Nat"]], ["Inf", ["Nat"]]]]],
 ];
-export const annotatedPlus: TermInferable = ["Ann", plus, plusType];
-test("check plus", () => {
-  typeInferable(0)([])(annotatedPlus);
+export const annotatedMul: TermInferable = ["Ann", mul, mulType];
+test("check mul", () => {
+  typeInferable(0)([])(annotatedMul);
 });
 
 describe.each([
   { lhs: 0, rhs: 0, result: 0 },
-  { lhs: 1, rhs: 0, result: 1 },
-  { lhs: 0, rhs: 1, result: 1 },
-  { lhs: 2, rhs: 1, result: 3 },
-  { lhs: 1, rhs: 2, result: 3 },
-  { lhs: 1, rhs: 3, result: 4 },
-  { lhs: 3, rhs: 2, result: 5 },
-  { lhs: 40, rhs: 2, result: 42 },
-])("case: plus $lhs $rhs", ({ lhs, rhs, result }) => {
+  { lhs: 1, rhs: 0, result: 0 },
+  { lhs: 0, rhs: 1, result: 0 },
+  { lhs: 2, rhs: 1, result: 2 },
+  { lhs: 1, rhs: 2, result: 2 },
+  { lhs: 1, rhs: 3, result: 3 },
+  { lhs: 3, rhs: 2, result: 6 },
+  { lhs: 40, rhs: 2, result: 80 },
+])("case: mul $lhs $rhs", ({ lhs, rhs, result }) => {
   const exp: TermInferable = [
-    [annotatedPlus, ":@:", makeNat(lhs)],
+    [annotatedMul, ":@:", makeNat(lhs)],
     ":@:",
     makeNat(rhs),
   ];

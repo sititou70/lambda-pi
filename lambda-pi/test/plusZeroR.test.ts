@@ -1,0 +1,103 @@
+import { test } from "vitest";
+import { TermCheckable, TermInferable } from "../types";
+import { typeInferable } from "../checker";
+import { makeNat } from "./makeNat";
+import { makeEqExpr, makeExpr } from "./makeExpr";
+import { makeApplyExpr } from "./apply";
+import { eqIndRCheck } from "./eqIndR.test";
+
+// forall (n: mynat),
+// n + MO = n
+
+const plusZeroRType: TermCheckable = [
+  "Inf",
+  [
+    "Pi",
+    // n :: nat
+    ["Inf", ["Nat"]],
+    [
+      "Inf",
+      [
+        "Eq",
+        ["Inf", ["Nat"]],
+        makeExpr(
+          ["n", "+", "0"],
+          new Map([
+            ["n", ["Inf", ["Bound", 0]]],
+            ["0", makeNat(0)],
+          ])
+        ),
+        ["Inf", ["Bound", 0]], // n
+      ],
+    ],
+  ],
+];
+const plusZeroRProof: TermCheckable = [
+  "Lam", // arg: n
+  [
+    "Inf",
+    [
+      "NatElim",
+      // NatElim_prop :: forall (n: Nat), n + Zero = n
+      [
+        "Lam", // arg: n
+        [
+          "Inf",
+          [
+            "Eq",
+            ["Inf", ["Nat"]],
+            makeExpr(
+              ["n", "+", "0"],
+              new Map([
+                ["n", ["Inf", ["Bound", 0]]],
+                ["0", makeNat(0)],
+              ])
+            ),
+            ["Inf", ["Bound", 0]],
+          ],
+        ],
+      ],
+      // NatElim_propZero
+      ["Refl", ["Inf", ["Nat"]], makeNat(0)],
+      // NatElim_propSucc
+      [
+        "Lam", // arg: n
+        [
+          "Lam", // arg: n + 0 = n
+          makeApplyExpr(
+            eqIndRCheck,
+            ["Inf", ["Nat"]],
+            [
+              "Lam", // arg: target
+              makeEqExpr(
+                [["S", "target"], "=", ["S", "n"]],
+                new Map([
+                  ["target", ["Inf", ["Bound", 0]]],
+                  ["n", ["Inf", ["Bound", 2]]],
+                ])
+              ),
+            ],
+            ["Inf", ["Bound", 1]],
+            makeExpr(["n", "+", 0], new Map([["n", ["Inf", ["Bound", 1]]]])),
+            [
+              "Refl",
+              ["Inf", ["Nat"]],
+              makeExpr(["S", "n"], new Map([["n", ["Inf", ["Bound", 1]]]])),
+            ],
+            ["Inf", ["Bound", 0]] // n + 0 = n
+          ),
+        ],
+      ],
+      // NatElim_nat
+      ["Inf", ["Bound", 0]],
+    ],
+  ],
+];
+export const plusZeroRCheck: TermInferable = [
+  "Ann",
+  plusZeroRProof,
+  plusZeroRType,
+];
+test("check plusZeroR", () => {
+  typeInferable(0)([])(plusZeroRCheck);
+});

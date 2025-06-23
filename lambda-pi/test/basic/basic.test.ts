@@ -1,8 +1,8 @@
 import { expect, test } from "vitest";
-import { Context, typeInferable } from "../checker";
-import { evalInferable } from "../eval";
-import { quote } from "../quote";
-import { TermCheckable, TermInferable, Value } from "../types";
+import { Context, typeInferable } from "../../checker";
+import { evalInferable } from "../../eval";
+import { quote } from "../../quote";
+import { TermCheckable, TermInferable, Value } from "../../types";
 
 const env: Context = [
   [["Global", "Bool"], ["VStar"]],
