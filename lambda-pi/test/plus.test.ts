@@ -6,19 +6,19 @@ import { quote } from "../quote";
 import { evalInferable } from "../eval";
 
 const plus: TermCheckable = [
-  "Lam",
+  "Lam", // arg: x
   [
     "Inf",
     [
       "NatElim",
-      // prop
+      // NatElim_prop
       [
-        "Lam", // arg: nat
+        "Lam", // arg: x
         ["Inf", ["Pi", ["Inf", ["Nat"]], ["Inf", ["Nat"]]]],
       ],
-      // propZero
+      // NatElim_propZero
       ["Lam", ["Inf", ["Bound", 0]]],
-      // propSucc
+      // NatElim_propSucc
       [
         "Lam", // arg: x
         [
@@ -42,8 +42,8 @@ const plus: TermCheckable = [
           ],
         ],
       ],
-      // nat
-      ["Inf", ["Bound", 0]],
+      // NatElim_nat
+      ["Inf", ["Bound", 0]], // x
     ],
   ],
 ];
