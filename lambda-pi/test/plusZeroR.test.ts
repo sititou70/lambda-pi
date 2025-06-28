@@ -15,21 +15,10 @@ const plusZeroRType: TermCheckable = [
     "Pi",
     // n :: nat
     ["Inf", ["Nat"]],
-    [
-      "Inf",
-      [
-        "Eq",
-        ["Inf", ["Nat"]],
-        makeExpr(
-          ["n", "+", "0"],
-          new Map([
-            ["n", ["Inf", ["Bound", 0]]],
-            ["0", makeNat(0)],
-          ])
-        ),
-        ["Inf", ["Bound", 0]], // n
-      ],
-    ],
+    makeEqExpr(
+      [["n", "+", 0], "=", "n"],
+      new Map([["n", ["Inf", ["Bound", 0]]]])
+    ),
   ],
 ];
 const plusZeroRProof: TermCheckable = [
@@ -41,21 +30,10 @@ const plusZeroRProof: TermCheckable = [
       // NatElim_prop :: forall (n: Nat), n + Zero = n
       [
         "Lam", // arg: n
-        [
-          "Inf",
-          [
-            "Eq",
-            ["Inf", ["Nat"]],
-            makeExpr(
-              ["n", "+", "0"],
-              new Map([
-                ["n", ["Inf", ["Bound", 0]]],
-                ["0", makeNat(0)],
-              ])
-            ),
-            ["Inf", ["Bound", 0]],
-          ],
-        ],
+        makeEqExpr(
+          [["n", "+", 0], "=", "n"],
+          new Map([["n", ["Inf", ["Bound", 0]]]])
+        ),
       ],
       // NatElim_propZero
       ["Refl", ["Inf", ["Nat"]], makeNat(0)],
