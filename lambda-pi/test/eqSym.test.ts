@@ -111,7 +111,7 @@ const eqSymProof: TermCheckable = [
     ],
   ],
 ];
-export const eqSymCheck: TermInferable = ["Ann", eqSymProof, eqSymType];
+export const eqSymAnn: TermInferable = ["Ann", eqSymProof, eqSymType];
 test("check eqSym", () => {
-  typeInferable(0)([])(eqSymCheck);
+  typeInferable(0)([])(eqSymAnn);
 });

@@ -3,10 +3,10 @@ import { TermCheckable, TermInferable } from "../types";
 import { typeInferable } from "../checker";
 import { makeEqExpr, makeExpr, VariableMap } from "./makeExpr";
 import { makeApplyExpr } from "./apply";
-import { eqIndRCheck } from "./eqIndR.test";
-import { eqSymCheck } from "./eqSym.test";
-import { plusZeroRCheck } from "./plusZeroR.test";
-import { plusSuccMoveCheck } from "./plusSuccMove.test";
+import { eqIndRAnn } from "./eqIndR.test";
+import { eqSymAnn } from "./eqSym.test";
+import { plusZeroRAnn } from "./plusZeroR.test";
+import { plusSuccMoveAnn } from "./plusSuccMove.test";
 
 // forall (x y: nat),
 // x + y = y + x
@@ -45,7 +45,7 @@ const plusCommBaseProof: TermCheckable = [
         [
           "Lam", // arg: 0 + y = y + 0
           makeApplyExpr(
-            eqIndRCheck,
+            eqIndRAnn,
             ["Inf", ["Nat"]],
             [
               "Lam", // arg: target
@@ -66,7 +66,7 @@ const plusCommBaseProof: TermCheckable = [
             ],
             // y + 0 = 0 + y
             makeApplyExpr(
-              eqSymCheck,
+              eqSymAnn,
               ["Inf", ["Nat"]],
               makeExpr([0, "+", "y"], new Map([["y", ["Inf", ["Bound", 1]]]])),
               makeExpr(["y", "+", 0], new Map([["y", ["Inf", ["Bound", 1]]]])),
@@ -80,13 +80,13 @@ const plusCommBaseProof: TermCheckable = [
     ],
   ],
 ];
-const plusCommBaseCheck: TermInferable = [
+const plusCommBaseAnn: TermInferable = [
   "Ann",
   plusCommBaseProof,
   plusCommBaseType,
 ];
 test("check plusCommBase", () => {
-  typeInferable(0)([])(plusCommBaseCheck);
+  typeInferable(0)([])(plusCommBaseAnn);
 });
 
 const plusCommInductionType: TermCheckable = [
@@ -229,7 +229,7 @@ test("check plusCommInductionExp1", () => {
 });
 
 const plusCommInductionExp2: TermCheckable = makeApplyExpr(
-  eqIndRCheck,
+  eqIndRAnn,
   ["Inf", ["Nat"]],
   [
     "Lam", // arg: target
@@ -242,12 +242,12 @@ const plusCommInductionExp2: TermCheckable = makeApplyExpr(
   makeExpr(["x", "+", ["S", "y"]], plusCommInductionExpVariableMap),
   plusCommInductionExp1,
   makeApplyExpr(
-    eqSymCheck,
+    eqSymAnn,
     ["Inf", ["Nat"]],
     makeExpr([["S", "x"], "+", "y"], plusCommInductionExpVariableMap),
     makeExpr(["x", "+", ["S", "y"]], plusCommInductionExpVariableMap),
     makeApplyExpr(
-      plusSuccMoveCheck,
+      plusSuccMoveAnn,
       makeExpr("x", plusCommInductionExpVariableMap),
       makeExpr("y", plusCommInductionExpVariableMap)
     )
@@ -262,7 +262,7 @@ test("check plusCommInductionExp2", () => {
 });
 
 const plusCommInductionExp3: TermCheckable = makeApplyExpr(
-  eqIndRCheck,
+  eqIndRAnn,
   ["Inf", ["Nat"]],
   [
     "Lam", // arg: target
@@ -275,7 +275,7 @@ const plusCommInductionExp3: TermCheckable = makeApplyExpr(
   makeExpr(["y", "+", ["S", "x"]], plusCommInductionExpVariableMap),
   plusCommInductionExp2,
   makeApplyExpr(
-    eqSymCheck,
+    eqSymAnn,
     ["Inf", ["Nat"]],
     makeExpr([["S", "x"], "+", "y"], plusCommInductionExpVariableMap),
     makeExpr(["y", "+", ["S", "x"]], plusCommInductionExpVariableMap),
@@ -322,7 +322,7 @@ const plusCommInductionProof: TermCheckable = [
           ],
           // NatElim_propZero
           makeApplyExpr(
-            plusZeroRCheck,
+            plusZeroRAnn,
             makeExpr(["S", "x"], new Map([["x", ["Inf", ["Bound", 2]]]]))
           ),
           // NatElim_propSucc
@@ -340,13 +340,13 @@ const plusCommInductionProof: TermCheckable = [
     ],
   ],
 ];
-const plusCommInductionCheck: TermInferable = [
+const plusCommInductionAnn: TermInferable = [
   "Ann",
   plusCommInductionProof,
   plusCommInductionType,
 ];
 test("check plusCommInduction", () => {
-  typeInferable(0)([])(plusCommInductionCheck);
+  typeInferable(0)([])(plusCommInductionAnn);
 });
 
 const plusCommType: TermCheckable = [
@@ -393,7 +393,7 @@ const plusCommProof: TermCheckable = [
         ],
         // NatElim_propZero
         makeApplyExpr(
-          plusCommBaseCheck,
+          plusCommBaseAnn,
           ["Inf", ["Bound", 0]] // y
         ),
         // NatElim_propSucc
@@ -402,7 +402,7 @@ const plusCommProof: TermCheckable = [
           [
             "Lam", // arg: x + y = y + x
             makeApplyExpr(
-              plusCommInductionCheck,
+              plusCommInductionAnn,
               ["Inf", ["Bound", 1]], // x
               ["Inf", ["Bound", 2]], // y
               ["Inf", ["Bound", 0]] // x + y = y + x
@@ -415,11 +415,7 @@ const plusCommProof: TermCheckable = [
     ],
   ],
 ];
-export const plusCommCheck: TermInferable = [
-  "Ann",
-  plusCommProof,
-  plusCommType,
-];
+export const plusCommAnn: TermInferable = ["Ann", plusCommProof, plusCommType];
 test("check plusComm", () => {
-  typeInferable(0)([])(plusCommCheck);
+  typeInferable(0)([])(plusCommAnn);
 });

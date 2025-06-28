@@ -3,7 +3,7 @@ import { TermCheckable, TermInferable } from "../types";
 import { typeInferable } from "../checker";
 import { makeEqExpr, makeExpr, VariableMap } from "./makeExpr";
 import { makeApplyExpr } from "./apply";
-import { eqIndRCheck } from "./eqIndR.test";
+import { eqIndRAnn } from "./eqIndR.test";
 
 // forall (n: nat),
 // n * (S O) = n
@@ -80,7 +80,7 @@ test("check mulOneRProofExp2", () => {
 });
 
 const mulOneRProofExp3: TermCheckable = makeApplyExpr(
-  eqIndRCheck,
+  eqIndRAnn,
   ["Inf", ["Nat"]],
   [
     "Lam", // arg: target
@@ -132,7 +132,7 @@ const mulOneRProof: TermCheckable = [
     ],
   ],
 ];
-export const mulOneRCheck: TermInferable = ["Ann", mulOneRProof, mulOneRType];
+export const mulOneRAnn: TermInferable = ["Ann", mulOneRProof, mulOneRType];
 test("check mulOneR", () => {
-  typeInferable(0)([])(mulOneRCheck);
+  typeInferable(0)([])(mulOneRAnn);
 });

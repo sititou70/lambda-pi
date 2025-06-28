@@ -3,10 +3,10 @@ import { TermCheckable, TermInferable } from "../types";
 import { typeInferable } from "../checker";
 import { makeEqExpr, makeExpr, VariableMap } from "./makeExpr";
 import { makeApplyExpr } from "./apply";
-import { eqIndRCheck } from "./eqIndR.test";
-import { eqSymCheck } from "./eqSym.test";
-import { plusAssocCheck } from "./plusAssoc.test";
-import { plusCommCheck } from "./plusComm.test";
+import { eqIndRAnn } from "./eqIndR.test";
+import { eqSymAnn } from "./eqSym.test";
+import { plusAssocAnn } from "./plusAssoc.test";
+import { plusCommAnn } from "./plusComm.test";
 
 // forall (x y z: nat),
 // x * (y + z) = (x * y) + (x * z)
@@ -143,7 +143,7 @@ test("check mulDistProofExp1", () => {
 });
 
 const mulDistProofExp2: TermCheckable = makeApplyExpr(
-  eqIndRCheck,
+  eqIndRAnn,
   ["Inf", ["Nat"]],
   [
     "Lam", // arg: target
@@ -166,7 +166,7 @@ const mulDistProofExp2: TermCheckable = makeApplyExpr(
   ),
   mulDistProofExp1,
   makeApplyExpr(
-    plusAssocCheck,
+    plusAssocAnn,
     makeExpr(["y", "+", ["x", "*", "y"]], mulDistProofExpVariableMap),
     makeExpr("z", mulDistProofExpVariableMap),
     makeExpr(["x", "*", "z"], mulDistProofExpVariableMap)
@@ -181,7 +181,7 @@ test("check mulDistProofExp2", () => {
 });
 
 const mulDistProofExp3: TermCheckable = makeApplyExpr(
-  eqIndRCheck,
+  eqIndRAnn,
   ["Inf", ["Nat"]],
   [
     "Lam", // arg: target
@@ -198,7 +198,7 @@ const mulDistProofExp3: TermCheckable = makeApplyExpr(
   makeExpr(["y", "+", [["x", "*", "y"], "+", "z"]], mulDistProofExpVariableMap),
   mulDistProofExp2,
   makeApplyExpr(
-    eqSymCheck,
+    eqSymAnn,
     ["Inf", ["Nat"]],
     makeExpr(
       [["y", "+", ["x", "*", "y"]], "+", "z"],
@@ -209,7 +209,7 @@ const mulDistProofExp3: TermCheckable = makeApplyExpr(
       mulDistProofExpVariableMap
     ),
     makeApplyExpr(
-      plusAssocCheck,
+      plusAssocAnn,
       makeExpr("y", mulDistProofExpVariableMap),
       makeExpr(["x", "*", "y"], mulDistProofExpVariableMap),
       makeExpr("z", mulDistProofExpVariableMap)
@@ -225,7 +225,7 @@ test("check mulDistProofExp3", () => {
 });
 
 const mulDistProofExp4: TermCheckable = makeApplyExpr(
-  eqIndRCheck,
+  eqIndRAnn,
   ["Inf", ["Nat"]],
   [
     "Lam", // arg: target
@@ -242,12 +242,12 @@ const mulDistProofExp4: TermCheckable = makeApplyExpr(
   makeExpr(["z", "+", ["x", "*", "y"]], mulDistProofExpVariableMap),
   mulDistProofExp3,
   makeApplyExpr(
-    eqSymCheck,
+    eqSymAnn,
     ["Inf", ["Nat"]],
     makeExpr([["x", "*", "y"], "+", "z"], mulDistProofExpVariableMap),
     makeExpr(["z", "+", ["x", "*", "y"]], mulDistProofExpVariableMap),
     makeApplyExpr(
-      plusCommCheck,
+      plusCommAnn,
       makeExpr(["x", "*", "y"], mulDistProofExpVariableMap),
       makeExpr("z", mulDistProofExpVariableMap)
     )
@@ -262,7 +262,7 @@ test("check mulDistProofExp4", () => {
 });
 
 const mulDistProofExp5: TermCheckable = makeApplyExpr(
-  eqIndRCheck,
+  eqIndRAnn,
   ["Inf", ["Nat"]],
   [
     "Lam", // arg: target
@@ -279,7 +279,7 @@ const mulDistProofExp5: TermCheckable = makeApplyExpr(
   makeExpr([["y", "+", "z"], "+", ["x", "*", "y"]], mulDistProofExpVariableMap),
   mulDistProofExp4,
   makeApplyExpr(
-    plusAssocCheck,
+    plusAssocAnn,
     makeExpr("y", mulDistProofExpVariableMap),
     makeExpr("z", mulDistProofExpVariableMap),
     makeExpr(["x", "*", "y"], mulDistProofExpVariableMap)
@@ -294,7 +294,7 @@ test("check mulDistProofExp5", () => {
 });
 
 const mulDistProofExp6: TermCheckable = makeApplyExpr(
-  eqIndRCheck,
+  eqIndRAnn,
   ["Inf", ["Nat"]],
   [
     "Lam", // arg: target
@@ -317,7 +317,7 @@ const mulDistProofExp6: TermCheckable = makeApplyExpr(
   ),
   mulDistProofExp5,
   makeApplyExpr(
-    eqSymCheck,
+    eqSymAnn,
     ["Inf", ["Nat"]],
     makeExpr(
       [[["y", "+", "z"], "+", ["x", "*", "y"]], "+", ["x", "*", "z"]],
@@ -328,7 +328,7 @@ const mulDistProofExp6: TermCheckable = makeApplyExpr(
       mulDistProofExpVariableMap
     ),
     makeApplyExpr(
-      plusAssocCheck,
+      plusAssocAnn,
       makeExpr(["y", "+", "z"], mulDistProofExpVariableMap),
       makeExpr(["x", "*", "y"], mulDistProofExpVariableMap),
       makeExpr(["x", "*", "z"], mulDistProofExpVariableMap)
@@ -344,7 +344,7 @@ test("check mulDistProofExp6", () => {
 });
 
 const mulDistProofExp7: TermCheckable = makeApplyExpr(
-  eqIndRCheck,
+  eqIndRAnn,
   ["Inf", ["Nat"]],
   [
     "Lam", // arg: target
@@ -422,7 +422,7 @@ const mulDistProof: TermCheckable = [
     ],
   ],
 ];
-export const mulDistCheck: TermInferable = ["Ann", mulDistProof, mulDistType];
+export const mulDistAnn: TermInferable = ["Ann", mulDistProof, mulDistType];
 test("check mulDist", () => {
-  typeInferable(0)([])(mulDistCheck);
+  typeInferable(0)([])(mulDistAnn);
 });

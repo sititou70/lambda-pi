@@ -1,8 +1,7 @@
 import { test } from "vitest";
 import { TermCheckable, TermInferable } from "../../types";
 import { typeInferable } from "../../checker";
-import { makeEqExpr } from "../makeExpr";
-import { annotatedPlus } from "../plus.test";
+import { plusAnn } from "../plus.test";
 
 // forall (n: nat),
 // O + n = O
@@ -22,7 +21,7 @@ const plusZeroLType: TermCheckable = [
           "Inf",
           [
             [
-              annotatedPlus,
+              plusAnn,
               ":@:",
               ["Inf", ["Zero"]], // 0
             ],
@@ -43,11 +42,11 @@ const plusZeroLProof: TermCheckable = [
   "Lam", // arg: n
   ["Refl", ["Inf", ["Nat"]], ["Inf", ["Bound", 0]]],
 ];
-export const plusZeroLCheck: TermInferable = [
+export const plusZeroLAnn: TermInferable = [
   "Ann",
   plusZeroLProof,
   plusZeroLType,
 ];
 test("check plusZeroL", () => {
-  typeInferable(0)([])(plusZeroLCheck);
+  typeInferable(0)([])(plusZeroLAnn);
 });

@@ -159,7 +159,7 @@ const eqIndRProof: TermCheckable = [
     ],
   ],
 ];
-export const eqIndRCheck: TermInferable = ["Ann", eqIndRProof, eqIndRType];
+export const eqIndRAnn: TermInferable = ["Ann", eqIndRProof, eqIndRType];
 test("check eqIndR", () => {
-  typeInferable(0)([])(eqIndRCheck);
+  typeInferable(0)([])(eqIndRAnn);
 });

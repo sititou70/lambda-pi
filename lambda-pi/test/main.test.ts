@@ -3,10 +3,10 @@ import { TermCheckable, TermInferable } from "../types";
 import { typeInferable } from "../checker";
 import { makeEqExpr, makeExpr, VariableMap } from "./makeExpr";
 import { makeApplyExpr } from "./apply";
-import { eqIndRCheck } from "./eqIndR.test";
-import { eqSymCheck } from "./eqSym.test";
-import { mulDistCheck } from "./mulDist.test";
-import { mulCommCheck } from "./mulComm.test";
+import { eqIndRAnn } from "./eqIndR.test";
+import { eqSymAnn } from "./eqSym.test";
+import { mulDistAnn } from "./mulDist.test";
+import { mulCommAnn } from "./mulComm.test";
 
 // forall (n: mynat),
 // 2 * (sum n) = n * (S n)
@@ -91,7 +91,7 @@ test("check mainProofExp2", () => {
 });
 
 const mainProofExp3: TermCheckable = makeApplyExpr(
-  eqIndRCheck,
+  eqIndRAnn,
   ["Inf", ["Nat"]],
   [
     "Lam", // arg: target
@@ -107,7 +107,7 @@ const mainProofExp3: TermCheckable = makeApplyExpr(
   ),
   mainProofExp1,
   makeApplyExpr(
-    eqSymCheck,
+    eqSymAnn,
     ["Inf", ["Nat"]],
     makeExpr([["S", "n"], "*", [2, "+", "n"]], mainProofExpVariableMap),
     makeExpr(
@@ -115,7 +115,7 @@ const mainProofExp3: TermCheckable = makeApplyExpr(
       mainProofExpVariableMap
     ),
     makeApplyExpr(
-      mulDistCheck,
+      mulDistAnn,
       makeExpr(["S", "n"], mainProofExpVariableMap),
       makeExpr(2, mainProofExpVariableMap),
       makeExpr("n", mainProofExpVariableMap)
@@ -131,7 +131,7 @@ test("check mainProofExp3", () => {
 });
 
 const mainProofExp4: TermCheckable = makeApplyExpr(
-  eqIndRCheck,
+  eqIndRAnn,
   ["Inf", ["Nat"]],
   [
     "Lam", // arg: target
@@ -148,12 +148,12 @@ const mainProofExp4: TermCheckable = makeApplyExpr(
   makeExpr([2, "*", ["S", "n"]], mainProofExpVariableMap),
   mainProofExp3,
   makeApplyExpr(
-    eqSymCheck,
+    eqSymAnn,
     ["Inf", ["Nat"]],
     makeExpr([["S", "n"], "*", 2], mainProofExpVariableMap),
     makeExpr([2, "*", ["S", "n"]], mainProofExpVariableMap),
     makeApplyExpr(
-      mulCommCheck,
+      mulCommAnn,
       makeExpr(["S", "n"], mainProofExpVariableMap),
       makeExpr(2, mainProofExpVariableMap)
     )
@@ -168,7 +168,7 @@ test("check mainProofExp4", () => {
 });
 
 const mainProofExp5: TermCheckable = makeApplyExpr(
-  eqIndRCheck,
+  eqIndRAnn,
   ["Inf", ["Nat"]],
   [
     "Lam", // arg: target
@@ -185,12 +185,12 @@ const mainProofExp5: TermCheckable = makeApplyExpr(
   makeExpr(["n", "*", ["S", "n"]], mainProofExpVariableMap),
   mainProofExp4,
   makeApplyExpr(
-    eqSymCheck,
+    eqSymAnn,
     ["Inf", ["Nat"]],
     makeExpr([["S", "n"], "*", "n"], mainProofExpVariableMap),
     makeExpr(["n", "*", ["S", "n"]], mainProofExpVariableMap),
     makeApplyExpr(
-      mulCommCheck,
+      mulCommAnn,
       makeExpr(["S", "n"], mainProofExpVariableMap),
       makeExpr("n", mainProofExpVariableMap)
     )
@@ -205,7 +205,7 @@ test("check mainProofExp5", () => {
 });
 
 const mainProofExp6: TermCheckable = makeApplyExpr(
-  eqIndRCheck,
+  eqIndRAnn,
   ["Inf", ["Nat"]],
   [
     "Lam", // arg: target
@@ -232,7 +232,7 @@ test("check mainProofExp6", () => {
 });
 
 const mainProofExp7: TermCheckable = makeApplyExpr(
-  eqIndRCheck,
+  eqIndRAnn,
   ["Inf", ["Nat"]],
   [
     "Lam", // arg: target
@@ -248,7 +248,7 @@ const mainProofExp7: TermCheckable = makeApplyExpr(
   makeExpr([2, "*", [["S", "n"], "+", ["sum", "n"]]], mainProofExpVariableMap),
   mainProofExp6,
   makeApplyExpr(
-    mulDistCheck,
+    mulDistAnn,
     makeExpr(2, mainProofExpVariableMap),
     makeExpr(["S", "n"], mainProofExpVariableMap),
     makeExpr(["sum", "n"], mainProofExpVariableMap)
@@ -300,7 +300,7 @@ const mainProof: TermCheckable = [
     ],
   ],
 ];
-export const mainCheck: TermInferable = ["Ann", mainProof, mainType];
+export const mainAnn: TermInferable = ["Ann", mainProof, mainType];
 test("check main", () => {
-  typeInferable(0)([])(mainCheck);
+  typeInferable(0)([])(mainAnn);
 });

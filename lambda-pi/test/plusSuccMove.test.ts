@@ -3,7 +3,7 @@ import { TermCheckable, TermInferable } from "../types";
 import { typeInferable } from "../checker";
 import { makeEqExpr, makeExpr } from "./makeExpr";
 import { makeApplyExpr } from "./apply";
-import { eqIndRCheck } from "./eqIndR.test";
+import { eqIndRAnn } from "./eqIndR.test";
 
 // forall (x y: nat),
 // (S x) + y = x + (S y)
@@ -68,7 +68,7 @@ const plusSuccMoveProof: TermCheckable = [
           [
             "Lam", // arg: (Succ x) + y = x + (Succ y)
             makeApplyExpr(
-              eqIndRCheck,
+              eqIndRAnn,
               ["Inf", ["Nat"]],
               [
                 "Lam", // arg: target
@@ -116,11 +116,11 @@ const plusSuccMoveProof: TermCheckable = [
     ],
   ],
 ];
-export const plusSuccMoveCheck: TermInferable = [
+export const plusSuccMoveAnn: TermInferable = [
   "Ann",
   plusSuccMoveProof,
   plusSuccMoveType,
 ];
 test("check plusSuccMove", () => {
-  typeInferable(0)([])(plusSuccMoveCheck);
+  typeInferable(0)([])(plusSuccMoveAnn);
 });

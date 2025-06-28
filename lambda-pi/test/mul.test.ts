@@ -2,7 +2,7 @@ import { describe, expect, test } from "vitest";
 import { TermCheckable, TermInferable } from "../types";
 import { typeInferable } from "../checker";
 import { makeNat } from "./makeNat";
-import { annotatedPlus } from "./plus.test";
+import { plusAnn } from "./plus.test";
 import { quote } from "../quote";
 import { evalInferable } from "../eval";
 
@@ -28,7 +28,7 @@ const mul: TermCheckable = [
               "Inf",
               [
                 [
-                  annotatedPlus,
+                  plusAnn,
                   ":@:",
                   ["Inf", ["Bound", 0]], // y
                 ],
@@ -55,9 +55,9 @@ const mulType: TermCheckable = [
   "Inf",
   ["Pi", ["Inf", ["Nat"]], ["Inf", ["Pi", ["Inf", ["Nat"]], ["Inf", ["Nat"]]]]],
 ];
-export const annotatedMul: TermInferable = ["Ann", mul, mulType];
+export const mulAnn: TermInferable = ["Ann", mul, mulType];
 test("check mul", () => {
-  typeInferable(0)([])(annotatedMul);
+  typeInferable(0)([])(mulAnn);
 });
 
 describe.each([
@@ -71,7 +71,7 @@ describe.each([
   { lhs: 40, rhs: 2, result: 80 },
 ])("case: mul $lhs $rhs", ({ lhs, rhs, result }) => {
   const exp: TermInferable = [
-    [annotatedMul, ":@:", makeNat(lhs)],
+    [mulAnn, ":@:", makeNat(lhs)],
     ":@:",
     makeNat(rhs),
   ];

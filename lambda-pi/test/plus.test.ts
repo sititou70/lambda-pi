@@ -51,9 +51,9 @@ const plusType: TermCheckable = [
   "Inf",
   ["Pi", ["Inf", ["Nat"]], ["Inf", ["Pi", ["Inf", ["Nat"]], ["Inf", ["Nat"]]]]],
 ];
-export const annotatedPlus: TermInferable = ["Ann", plus, plusType];
+export const plusAnn: TermInferable = ["Ann", plus, plusType];
 test("check plus", () => {
-  typeInferable(0)([])(annotatedPlus);
+  typeInferable(0)([])(plusAnn);
 });
 
 describe.each([
@@ -67,7 +67,7 @@ describe.each([
   { lhs: 40, rhs: 2, result: 42 },
 ])("case: plus $lhs $rhs", ({ lhs, rhs, result }) => {
   const exp: TermInferable = [
-    [annotatedPlus, ":@:", makeNat(lhs)],
+    [plusAnn, ":@:", makeNat(lhs)],
     ":@:",
     makeNat(rhs),
   ];

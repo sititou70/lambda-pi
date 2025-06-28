@@ -8,16 +8,16 @@ const one: TermCheckable = ["Inf", ["Succ", ["Inf", ["Zero"]]]];
 
 const oneEqOneType: TermCheckable = ["Inf", ["Eq", ["Inf", ["Nat"]], one, one]];
 const oneEqOneProof: TermCheckable = ["Refl", ["Inf", ["Nat"]], one];
-const oneEqOneCheck: TermInferable = ["Ann", oneEqOneProof, oneEqOneType];
+const oneEqOneAnn: TermInferable = ["Ann", oneEqOneProof, oneEqOneType];
 
 test("check 1 = 1", () => {
-  const actual: TermCheckable = quote(0)(typeInferable(0)([])(oneEqOneCheck));
+  const actual: TermCheckable = quote(0)(typeInferable(0)([])(oneEqOneAnn));
   const expected: TermCheckable = oneEqOneType;
   expect(actual).toEqual(expected);
 });
 
 test("eval 1 = 1", () => {
-  const actual: Value = evalInferable(oneEqOneCheck)([]);
+  const actual: Value = evalInferable(oneEqOneAnn)([]);
   const expected: Value = ["VRefl", ["VNat"], ["VSucc", ["VZero"]]];
   expect(actual).toEqual(expected);
 });
@@ -32,30 +32,28 @@ const succType: TermCheckable = [
   "Inf",
   ["Pi", ["Inf", ["Nat"]], ["Inf", ["Nat"]]],
 ];
-const annotatedSucc: TermInferable = ["Ann", succ, succType];
+const succAnn: TermInferable = ["Ann", succ, succType];
 
-const succOne: TermCheckable = ["Inf", [annotatedSucc, ":@:", one]];
+const succOne: TermCheckable = ["Inf", [succAnn, ":@:", one]];
 const succOneEqTwoType: TermCheckable = [
   "Inf",
   ["Eq", ["Inf", ["Nat"]], succOne, two],
 ];
 const succOneEqTwoProof: TermCheckable = ["Refl", ["Inf", ["Nat"]], two];
-const succOneEqTwoCheck: TermInferable = [
+const succOneEqTwoAnn: TermInferable = [
   "Ann",
   succOneEqTwoProof,
   succOneEqTwoType,
 ];
 
 test("check succ 1 = 2", () => {
-  const actual: TermCheckable = quote(0)(
-    typeInferable(0)([])(succOneEqTwoCheck)
-  );
+  const actual: TermCheckable = quote(0)(typeInferable(0)([])(succOneEqTwoAnn));
   const expected: TermCheckable = ["Inf", ["Eq", ["Inf", ["Nat"]], two, two]];
   expect(actual).toEqual(expected);
 });
 
 test("eval succ 1 = 2", () => {
-  const actual: Value = evalInferable(succOneEqTwoCheck)([]);
+  const actual: Value = evalInferable(succOneEqTwoAnn)([]);
   const expected: Value = ["VRefl", ["VNat"], ["VSucc", ["VSucc", ["VZero"]]]];
   expect(actual).toEqual(expected);
 });

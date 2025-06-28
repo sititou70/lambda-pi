@@ -1,8 +1,8 @@
 import { TermCheckable } from "../types";
 import { makeNat } from "./makeNat";
-import { annotatedMul } from "./mul.test";
-import { annotatedPlus } from "./plus.test";
-import { annotatedSum } from "./sum.test";
+import { mulAnn } from "./mul.test";
+import { plusAnn } from "./plus.test";
+import { sumAnn } from "./sum.test";
 
 type VarExpr = string;
 type NatExpr = number;
@@ -31,14 +31,14 @@ export const makeExpr = (
   }
 
   if (expr.length === 2 && expr[0] === "sum") {
-    return ["Inf", [annotatedSum, ":@:", makeExpr(expr[1], variableMap)]];
+    return ["Inf", [sumAnn, ":@:", makeExpr(expr[1], variableMap)]];
   }
 
   if (expr[1] === "+") {
     return [
       "Inf",
       [
-        [annotatedPlus, ":@:", makeExpr(expr[0], variableMap)],
+        [plusAnn, ":@:", makeExpr(expr[0], variableMap)],
         ":@:",
         makeExpr(expr[2], variableMap),
       ],
@@ -49,7 +49,7 @@ export const makeExpr = (
     return [
       "Inf",
       [
-        [annotatedMul, ":@:", makeExpr(expr[0], variableMap)],
+        [mulAnn, ":@:", makeExpr(expr[0], variableMap)],
         ":@:",
         makeExpr(expr[2], variableMap),
       ],

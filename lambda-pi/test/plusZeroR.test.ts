@@ -4,7 +4,7 @@ import { typeInferable } from "../checker";
 import { makeNat } from "./makeNat";
 import { makeEqExpr, makeExpr } from "./makeExpr";
 import { makeApplyExpr } from "./apply";
-import { eqIndRCheck } from "./eqIndR.test";
+import { eqIndRAnn } from "./eqIndR.test";
 
 // forall (n: mynat),
 // n + MO = n
@@ -43,7 +43,7 @@ const plusZeroRProof: TermCheckable = [
         [
           "Lam", // arg: n + 0 = n
           makeApplyExpr(
-            eqIndRCheck,
+            eqIndRAnn,
             ["Inf", ["Nat"]],
             [
               "Lam", // arg: target
@@ -71,11 +71,11 @@ const plusZeroRProof: TermCheckable = [
     ],
   ],
 ];
-export const plusZeroRCheck: TermInferable = [
+export const plusZeroRAnn: TermInferable = [
   "Ann",
   plusZeroRProof,
   plusZeroRType,
 ];
 test("check plusZeroR", () => {
-  typeInferable(0)([])(plusZeroRCheck);
+  typeInferable(0)([])(plusZeroRAnn);
 });

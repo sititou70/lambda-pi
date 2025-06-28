@@ -3,11 +3,11 @@ import { TermCheckable, TermInferable } from "../types";
 import { typeInferable } from "../checker";
 import { makeEqExpr, makeExpr, VariableMap } from "./makeExpr";
 import { makeApplyExpr } from "./apply";
-import { mulZeroRCheck } from "./mulZeroR.test";
-import { eqIndRCheck } from "./eqIndR.test";
-import { eqSymCheck } from "./eqSym.test";
-import { mulOneRCheck } from "./mulOneR.test";
-import { mulDistCheck } from "./mulDist.test";
+import { mulZeroRAnn } from "./mulZeroR.test";
+import { eqIndRAnn } from "./eqIndR.test";
+import { eqSymAnn } from "./eqSym.test";
+import { mulOneRAnn } from "./mulOneR.test";
+import { mulDistAnn } from "./mulDist.test";
 
 // forall (x y: nat),
 // x * y = y * x
@@ -121,7 +121,7 @@ test("check mulCommProofExp1", () => {
 });
 
 const mulCommProofExp2: TermCheckable = makeApplyExpr(
-  eqIndRCheck,
+  eqIndRAnn,
   ["Inf", ["Nat"]],
   [
     "Lam", // arg: target
@@ -134,7 +134,7 @@ const mulCommProofExp2: TermCheckable = makeApplyExpr(
   makeExpr(["y", "*", "x"], mulCommProofExpVariableMap),
   mulCommProofExp1,
   makeApplyExpr(
-    eqSymCheck,
+    eqSymAnn,
     ["Inf", ["Nat"]],
     makeExpr(["x", "*", "y"], mulCommProofExpVariableMap),
     makeExpr(["y", "*", "x"], mulCommProofExpVariableMap),
@@ -150,7 +150,7 @@ test("check mulCommProofExp2", () => {
 });
 
 const mulCommProofExp3: TermCheckable = makeApplyExpr(
-  eqIndRCheck,
+  eqIndRAnn,
   ["Inf", ["Nat"]],
   [
     "Lam", // arg: target
@@ -162,7 +162,7 @@ const mulCommProofExp3: TermCheckable = makeApplyExpr(
   makeExpr("x", mulCommProofExpVariableMap),
   makeExpr(["x", "*", 1], mulCommProofExpVariableMap),
   mulCommProofExp2,
-  makeApplyExpr(mulOneRCheck, makeExpr("x", mulCommProofExpVariableMap))
+  makeApplyExpr(mulOneRAnn, makeExpr("x", mulCommProofExpVariableMap))
 );
 test("check mulCommProofExp3", () => {
   checkExp(mulCommProofExp3, [
@@ -173,7 +173,7 @@ test("check mulCommProofExp3", () => {
 });
 
 const mulCommProofExp4: TermCheckable = makeApplyExpr(
-  eqIndRCheck,
+  eqIndRAnn,
   ["Inf", ["Nat"]],
   [
     "Lam", // arg: target
@@ -186,7 +186,7 @@ const mulCommProofExp4: TermCheckable = makeApplyExpr(
   makeExpr(["x", "*", [1, "+", "y"]], mulCommProofExpVariableMap),
   mulCommProofExp3,
   makeApplyExpr(
-    mulDistCheck,
+    mulDistAnn,
     makeExpr("x", mulCommProofExpVariableMap),
     makeExpr(1, mulCommProofExpVariableMap),
     makeExpr("y", mulCommProofExpVariableMap)
@@ -230,7 +230,7 @@ const mulCommProof: TermCheckable = [
         ],
         // NatElim_propZero
         makeApplyExpr(
-          mulZeroRCheck,
+          mulZeroRAnn,
           ["Inf", ["Bound", 1]] // x
         ),
         // NatElim_propSucc
@@ -247,7 +247,7 @@ const mulCommProof: TermCheckable = [
     ],
   ],
 ];
-export const mulCommCheck: TermInferable = ["Ann", mulCommProof, mulCommType];
+export const mulCommAnn: TermInferable = ["Ann", mulCommProof, mulCommType];
 test.skip("check mulComm", () => {
-  typeInferable(0)([])(mulCommCheck);
+  typeInferable(0)([])(mulCommAnn);
 });

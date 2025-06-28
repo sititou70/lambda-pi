@@ -47,11 +47,7 @@ const mulZeroRProof: TermCheckable = [
     ],
   ],
 ];
-export const mulZeroRCheck: TermInferable = [
-  "Ann",
-  mulZeroRProof,
-  mulZeroRType,
-];
+export const mulZeroRAnn: TermInferable = ["Ann", mulZeroRProof, mulZeroRType];
 test("check mulZeroR", () => {
-  typeInferable(0)([])(mulZeroRCheck);
+  typeInferable(0)([])(mulZeroRAnn);
 });

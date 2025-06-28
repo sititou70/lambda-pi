@@ -3,7 +3,7 @@ import { TermCheckable, TermInferable } from "../types";
 import { typeInferable } from "../checker";
 import { makeEqExpr, makeExpr } from "./makeExpr";
 import { makeApplyExpr } from "./apply";
-import { eqIndRCheck } from "./eqIndR.test";
+import { eqIndRAnn } from "./eqIndR.test";
 
 // forall (x y z: mynat),
 // (x + y) + z = x + (y + z)
@@ -80,7 +80,7 @@ const plusAssocProof: TermCheckable = [
             [
               "Lam", // arg: (x + y) + z = x + (y + z)
               makeApplyExpr(
-                eqIndRCheck,
+                eqIndRAnn,
                 ["Inf", ["Nat"]],
                 [
                   "Lam", // arg: target
@@ -133,11 +133,11 @@ const plusAssocProof: TermCheckable = [
     ],
   ],
 ];
-export const plusAssocCheck: TermInferable = [
+export const plusAssocAnn: TermInferable = [
   "Ann",
   plusAssocProof,
   plusAssocType,
 ];
 test("check plusAssoc", () => {
-  typeInferable(0)([])(plusAssocCheck);
+  typeInferable(0)([])(plusAssocAnn);
 });
