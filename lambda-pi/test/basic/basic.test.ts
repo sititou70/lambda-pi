@@ -1,10 +1,11 @@
 import { expect, test } from "vitest";
 import { Context, typeInferable } from "../../checker";
-import { evalInferable } from "../../eval";
+import { evalCheckable, evalInferable } from "../../eval";
 import { quote } from "../../quote";
 import { TermCheckable, TermInferable, Value } from "../../types";
+import { a } from "vitest/dist/chunks/suite.d.FvehnV49.js";
 
-const env: Context = [
+const context: Context = [
   [["Global", "Bool"], ["VStar"]],
   [
     ["Global", "false"],
@@ -13,9 +14,9 @@ const env: Context = [
 ];
 
 const id: TermCheckable = ["Lam", ["Inf", ["Bound", 0]]];
-const idPoly: TermCheckable = ["Lam", id];
 
-const type1: TermCheckable = [
+const idPoly: TermCheckable = ["Lam", id];
+const idPolyType: TermCheckable = [
   "Inf",
   [
     "Pi",
@@ -23,52 +24,60 @@ const type1: TermCheckable = [
     ["Inf", ["Pi", ["Inf", ["Bound", 0]], ["Inf", ["Bound", 1]]]],
   ],
 ];
-const exp1: TermInferable = ["Ann", idPoly, type1];
-test("check exp1", () => {
-  const actual: TermCheckable = quote(0)(typeInferable(0)(env)(exp1));
-  const expected: TermCheckable = type1;
-  expect(actual).toEqual(expected);
+const idPolyAnn: TermInferable = ["Ann", idPoly, idPolyType];
+
+test("check idPoly", () => {
+  typeInferable(0)(context)(idPolyAnn);
 });
 
 const boolTerm: TermCheckable = ["Inf", ["Free", ["Global", "Bool"]]];
-const exp2: TermInferable = [exp1, ":@:", boolTerm];
-test("check exp2", () => {
-  const actual: TermCheckable = quote(0)(typeInferable(0)(env)(exp2));
-  const expected: TermCheckable = ["Inf", ["Pi", boolTerm, boolTerm]];
-  expect(actual).toEqual(expected);
+const idBool: TermCheckable = ["Inf", [idPolyAnn, ":@:", boolTerm]];
+const idBoolType: TermCheckable = ["Inf", ["Pi", boolTerm, boolTerm]];
+const idBoolAnn: TermInferable = ["Ann", idBool, idBoolType];
+test("check idBool", () => {
+  typeInferable(0)(context)(idBoolAnn);
 });
 
 const falseTerm: TermCheckable = ["Inf", ["Free", ["Global", "false"]]];
-const exp3: TermInferable = [exp2, ":@:", falseTerm];
-test("check exp3", () => {
-  const actual: TermCheckable = quote(0)(typeInferable(0)(env)(exp3));
-  const expected: TermCheckable = ["Inf", ["Free", ["Global", "Bool"]]];
-  expect(actual).toEqual(expected);
+const applyIdBoolToFalse: TermCheckable = [
+  "Inf",
+  [idBoolAnn, ":@:", falseTerm],
+];
+const applyIdBoolToFalseType: TermCheckable = boolTerm;
+const applyIdBoolToFalseAnn: TermInferable = [
+  "Ann",
+  applyIdBoolToFalse,
+  applyIdBoolToFalseType,
+];
+test("check applyIdBoolToFalse", () => {
+  typeInferable(0)(context)(applyIdBoolToFalseAnn);
 });
-
-test("eval exp3", () => {
-  const actual: Value = evalInferable(exp3)([]);
+test("eval applyIdBoolToFalse", () => {
+  const actual: Value = evalCheckable(applyIdBoolToFalse)([]);
   const expected: Value = ["VNeutral", ["NFree", ["Global", "false"]]];
   expect(actual).toEqual(expected);
 });
 
 const starTerm: TermCheckable = ["Inf", ["Star"]];
-const exp4: TermInferable = [exp1, ":@:", starTerm];
-test("check exp4", () => {
-  const actual: TermCheckable = quote(0)(typeInferable(0)(env)(exp4));
-  const expected: TermCheckable = ["Inf", ["Pi", starTerm, starTerm]];
-  expect(actual).toEqual(expected);
+const idStar: TermCheckable = ["Inf", [idPolyAnn, ":@:", starTerm]];
+const idStarType: TermCheckable = ["Inf", ["Pi", starTerm, starTerm]];
+const idStarAnn: TermInferable = ["Ann", idStar, idStarType];
+test("check idStar", () => {
+  typeInferable(0)(context)(idStarAnn);
 });
 
-const exp5: TermInferable = [exp4, ":@:", boolTerm];
-test("check exp5", () => {
-  const actual: TermCheckable = quote(0)(typeInferable(0)(env)(exp5));
-  const expected: TermCheckable = starTerm;
-  expect(actual).toEqual(expected);
+const applyStarIdToBool: TermCheckable = ["Inf", [idStarAnn, ":@:", boolTerm]];
+const applyStarIdToBoolType: TermCheckable = starTerm;
+const applyStarIdToBoolAnn: TermInferable = [
+  "Ann",
+  applyStarIdToBool,
+  applyStarIdToBoolType,
+];
+test("check applyStarIdToBool", () => {
+  typeInferable(0)(context)(applyStarIdToBoolAnn);
 });
-
-test("eval exp5", () => {
-  const actual: Value = evalInferable(exp5)([]);
+test("eval applyStarIdToBool", () => {
+  const actual: Value = evalInferable(applyStarIdToBoolAnn)([]);
   const expected: Value = ["VNeutral", ["NFree", ["Global", "Bool"]]];
   expect(actual).toEqual(expected);
 });
