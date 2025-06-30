@@ -150,7 +150,7 @@ export const typeInferable =
         aValue,
         // NOTE: 以下の参考実装では、この部分は(z: Value) => vapp(vapp(propValue)(z))(z)である。
         // しかし、論文の記述ではpropReflの型はforall (z: a). prop z z (Refl a z)なので、(Refl a z)にも適用するように修正する必要がある。
-        // 実際、rocqで検証済みのコードを移植しているproof.basic.test.tsの型検査は修正版の方でパスする。
+        // 実際、rocqで検証済みのコードは修正版の方でパスする。
         // おそらく参考実装のバグか、設計の違いによるものなので、ここでは修正版の方を採用する。
         // 参考実装: https://www.andres-loeh.de/LambdaPi/LambdaPi.hs
         // rocqで検証済みのコード：https://github.com/sititou70/rocq-induction-from-scratch/blob/main/src/basic.v
