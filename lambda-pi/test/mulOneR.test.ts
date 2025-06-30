@@ -66,9 +66,8 @@ const mulOneRProofExpVariableMapWithTarget: VariableMap = new Map([
 ]);
 
 const mulOneRProofExp1: TermCheckable = [
-  "Refl",
-  ["Inf", ["Nat"]],
-  makeExpr(["S", "n"], mulOneRProofExpVariableMap),
+  "Inf",
+  ["Refl", ["Inf", ["Nat"]], makeExpr(["S", "n"], mulOneRProofExpVariableMap)],
 ];
 test("check mulOneRProofExp1", () => {
   checkExp(mulOneRProofExp1, [["S", "n"], "=", ["S", "n"]]);
@@ -118,7 +117,7 @@ const mulOneRProof: TermCheckable = [
         ),
       ],
       // NatElim_propZero
-      ["Refl", ["Inf", ["Nat"]], ["Inf", ["Zero"]]],
+      ["Inf", ["Refl", ["Inf", ["Nat"]], ["Inf", ["Zero"]]]],
       // NatElim_propSucc
       [
         "Lam", // arg: n

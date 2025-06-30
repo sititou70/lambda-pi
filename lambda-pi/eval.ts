@@ -88,6 +88,12 @@ export const evalInferable =
       const yValue = evalCheckable(y)(env);
       return ["VEq", aValue, xValue, yValue];
     }
+    if (term[0] === "Refl") {
+      const [_, a, x] = term;
+      const aValue = evalCheckable(a)(env);
+      const xValue = evalCheckable(x)(env);
+      return ["VRefl", aValue, xValue];
+    }
     if (term[0] === "EqElim") {
       const [_, a, prop, propRefl, x, y, eqaxy] = term;
       const propReflValue = evalCheckable(propRefl)(env);
@@ -140,12 +146,6 @@ export const evalCheckable =
     if (term[0] === "Lam") {
       const [_, exp] = term;
       return ["VLam", (arg: Value) => evalCheckable(exp)([arg, ...env])];
-    }
-    if (term[0] === "Refl") {
-      const [_, a, x] = term;
-      const aValue = evalCheckable(a)(env);
-      const xValue = evalCheckable(x)(env);
-      return ["VRefl", aValue, xValue];
     }
 
     return term satisfies never;

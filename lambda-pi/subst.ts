@@ -66,6 +66,12 @@ export const substInferable =
       const substitutedY = substCheckable(index)(to)(y);
       return ["Eq", substitutedA, substitutedX, substitutedY];
     }
+    if (term[0] === "Refl") {
+      const [_, a, z] = term;
+      const substitutedA = substCheckable(index)(to)(a);
+      const substitutedZ = substCheckable(index)(to)(z);
+      return ["Refl", substitutedA, substitutedZ];
+    }
     if (term[0] === "EqElim") {
       const [_, a, prop, propRefl, x, y, eqaxy] = term;
       const substitutedA = substCheckable(index)(to)(a);
@@ -101,12 +107,6 @@ export const substCheckable =
       const exp = term[1];
       const substitutedExp = substCheckable(index + 1)(to)(exp);
       return ["Lam", substitutedExp];
-    }
-    if (term[0] === "Refl") {
-      const [_, a, z] = term;
-      const substitutedA = substCheckable(index)(to)(a);
-      const substitutedZ = substCheckable(index)(to)(z);
-      return ["Refl", substitutedA, substitutedZ];
     }
 
     return term satisfies never;

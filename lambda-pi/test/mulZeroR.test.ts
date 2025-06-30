@@ -33,7 +33,7 @@ const mulZeroRProof: TermCheckable = [
         ),
       ],
       // NatElim_propZero
-      ["Refl", ["Inf", ["Nat"]], ["Inf", ["Zero"]]],
+      ["Inf", ["Refl", ["Inf", ["Nat"]], ["Inf", ["Zero"]]]],
       // NatElim_propSucc
       [
         "Lam", // arg: n

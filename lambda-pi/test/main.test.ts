@@ -69,9 +69,12 @@ const mainProofExpVariableMapWithTarget: VariableMap = new Map([
 ]);
 
 const mainProofExp1: TermCheckable = [
-  "Refl",
-  ["Inf", ["Nat"]],
-  makeExpr([["S", "n"], "*", ["S", ["S", "n"]]], mainProofExpVariableMap),
+  "Inf",
+  [
+    "Refl",
+    ["Inf", ["Nat"]],
+    makeExpr([["S", "n"], "*", ["S", ["S", "n"]]], mainProofExpVariableMap),
+  ],
 ];
 test("check mainProofExp1", () => {
   checkExp(mainProofExp1, [
@@ -286,7 +289,7 @@ const mainProof: TermCheckable = [
         ),
       ],
       // NatElim_propZero
-      ["Refl", ["Inf", ["Nat"]], ["Inf", ["Zero"]]],
+      ["Inf", ["Refl", ["Inf", ["Nat"]], ["Inf", ["Zero"]]]],
       // NatElim_propSucc
       [
         "Lam", // arg: n

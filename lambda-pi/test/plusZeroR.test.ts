@@ -36,7 +36,7 @@ const plusZeroRProof: TermCheckable = [
         ),
       ],
       // NatElim_propZero
-      ["Refl", ["Inf", ["Nat"]], makeNat(0)],
+      ["Inf", ["Refl", ["Inf", ["Nat"]], makeNat(0)]],
       // NatElim_propSucc
       [
         "Lam", // arg: n
@@ -58,9 +58,12 @@ const plusZeroRProof: TermCheckable = [
             ["Inf", ["Bound", 1]],
             makeExpr(["n", "+", 0], new Map([["n", ["Inf", ["Bound", 1]]]])),
             [
-              "Refl",
-              ["Inf", ["Nat"]],
-              makeExpr(["S", "n"], new Map([["n", ["Inf", ["Bound", 1]]]])),
+              "Inf",
+              [
+                "Refl",
+                ["Inf", ["Nat"]],
+                makeExpr(["S", "n"], new Map([["n", ["Inf", ["Bound", 1]]]])),
+              ],
             ],
             ["Inf", ["Bound", 0]] // n + 0 = n
           ),

@@ -64,15 +64,18 @@ const plusAssocProof: TermCheckable = [
           ],
           // NatElim_propZero
           [
-            "Refl",
-            ["Inf", ["Nat"]],
-            makeExpr(
-              ["y", "+", "z"],
-              new Map([
-                ["y", ["Inf", ["Bound", 1]]],
-                ["z", ["Inf", ["Bound", 0]]],
-              ])
-            ),
+            "Inf",
+            [
+              "Refl",
+              ["Inf", ["Nat"]],
+              makeExpr(
+                ["y", "+", "z"],
+                new Map([
+                  ["y", ["Inf", ["Bound", 1]]],
+                  ["z", ["Inf", ["Bound", 0]]],
+                ])
+              ),
+            ],
           ],
           // NatElim_propSucc
           [
@@ -111,16 +114,19 @@ const plusAssocProof: TermCheckable = [
                   ])
                 ),
                 [
-                  "Refl",
-                  ["Inf", ["Nat"]],
-                  makeExpr(
-                    ["S", ["x", "+", ["y", "+", "z"]]],
-                    new Map([
-                      ["x", ["Inf", ["Bound", 1]]],
-                      ["y", ["Inf", ["Bound", 3]]],
-                      ["z", ["Inf", ["Bound", 2]]],
-                    ])
-                  ),
+                  "Inf",
+                  [
+                    "Refl",
+                    ["Inf", ["Nat"]],
+                    makeExpr(
+                      ["S", ["x", "+", ["y", "+", "z"]]],
+                      new Map([
+                        ["x", ["Inf", ["Bound", 1]]],
+                        ["y", ["Inf", ["Bound", 3]]],
+                        ["z", ["Inf", ["Bound", 2]]],
+                      ])
+                    ),
+                  ],
                 ],
                 ["Inf", ["Bound", 0]] // (x + y) + z = x + (y + z)
               ),

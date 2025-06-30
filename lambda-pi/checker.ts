@@ -121,6 +121,15 @@ export const typeInferable =
       typeCheckable(index)(context)(y)(aValue);
       return ["VStar"];
     }
+    if (term[0] === "Refl") {
+      if (DEBUG) console.log(++DEBUG_STEP, "Start: Refl");
+      const [_, a, z] = term;
+      typeCheckable(index)(context)(a)(["VStar"]);
+      const aValue = evalCheckable(a)([]);
+      typeCheckable(index)(context)(z)(aValue);
+      const zValue = evalCheckable(z)([]);
+      return ["VEq", aValue, zValue, zValue];
+    }
     if (term[0] === "EqElim") {
       if (DEBUG) console.log(++DEBUG_STEP, "Start: EqElim");
       const [_, a, prop, propRefl, x, y, eqaxy] = term;
@@ -192,48 +201,6 @@ export const typeCheckable =
       typeCheckable(index + 1)(extendedContext)(substitutedExp)(
         typeRet(vfree(["Local", index]))
       );
-      return;
-    }
-    if (term[0] === "Refl" && type[0] === "VEq") {
-      if (DEBUG) console.log(++DEBUG_STEP, "Start: Refl");
-      const [_, a, z] = term;
-      const [__, bValue, xValue, yValue] = type;
-      typeCheckable(index)(context)(a)(["VStar"]);
-      const aValue = evalCheckable(a)([]);
-      if (!isEqTermCheckable(quote(0)(aValue))(quote(0)(bValue)))
-        throw {
-          msg: "type mismatch",
-          index,
-          context,
-          term,
-          type,
-          aValue,
-          bValue,
-        };
-
-      typeCheckable(index)(context)(z)(aValue);
-      const zValue = evalCheckable(z)([]);
-      if (!isEqTermCheckable(quote(0)(zValue))(quote(0)(xValue)))
-        throw {
-          msg: "type mismatch",
-          index,
-          context,
-          term,
-          type,
-          zValue,
-          xValue,
-        };
-      if (!isEqTermCheckable(quote(0)(zValue))(quote(0)(yValue)))
-        throw {
-          msg: "type mismatch",
-          index,
-          context,
-          term,
-          type,
-          zValue,
-          yValue,
-        };
-
       return;
     }
 

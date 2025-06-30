@@ -7,7 +7,7 @@ import { TermCheckable, TermInferable, Value } from "../../types";
 const one: TermCheckable = ["Inf", ["Succ", ["Inf", ["Zero"]]]];
 
 const oneEqOneType: TermCheckable = ["Inf", ["Eq", ["Inf", ["Nat"]], one, one]];
-const oneEqOneProof: TermCheckable = ["Refl", ["Inf", ["Nat"]], one];
+const oneEqOneProof: TermCheckable = ["Inf", ["Refl", ["Inf", ["Nat"]], one]];
 const oneEqOneAnn: TermInferable = ["Ann", oneEqOneProof, oneEqOneType];
 
 test("check 1 = 1", () => {
@@ -39,7 +39,10 @@ const succOneEqTwoType: TermCheckable = [
   "Inf",
   ["Eq", ["Inf", ["Nat"]], succOne, two],
 ];
-const succOneEqTwoProof: TermCheckable = ["Refl", ["Inf", ["Nat"]], two];
+const succOneEqTwoProof: TermCheckable = [
+  "Inf",
+  ["Refl", ["Inf", ["Nat"]], two],
+];
 const succOneEqTwoAnn: TermInferable = [
   "Ann",
   succOneEqTwoProof,

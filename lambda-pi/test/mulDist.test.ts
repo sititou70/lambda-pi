@@ -127,12 +127,15 @@ const mulDistProofExpVariableMapWithTarget: VariableMap = new Map([
 ]);
 
 const mulDistProofExp1: TermCheckable = [
-  "Refl",
-  ["Inf", ["Nat"]],
-  makeExpr(
-    [["y", "+", ["x", "*", "y"]], "+", ["z", "+", ["x", "*", "z"]]],
-    mulDistProofExpVariableMap
-  ),
+  "Inf",
+  [
+    "Refl",
+    ["Inf", ["Nat"]],
+    makeExpr(
+      [["y", "+", ["x", "*", "y"]], "+", ["z", "+", ["x", "*", "z"]]],
+      mulDistProofExpVariableMap
+    ),
+  ],
 ];
 test("check mulDistProofExp1", () => {
   checkExp(mulDistProofExp1, [
@@ -406,7 +409,7 @@ const mulDistProof: TermCheckable = [
             ),
           ],
           // NatElim_propZero
-          ["Refl", ["Inf", ["Nat"]], ["Inf", ["Zero"]]],
+          ["Inf", ["Refl", ["Inf", ["Nat"]], ["Inf", ["Zero"]]]],
           // NatElim_propSucc
           [
             "Lam", // arg: x

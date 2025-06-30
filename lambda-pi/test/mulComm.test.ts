@@ -108,9 +108,12 @@ const mulCommProofExpVariableMapWithTarget: VariableMap = new Map([
 ]);
 
 const mulCommProofExp1: TermCheckable = [
-  "Refl",
-  ["Inf", ["Nat"]],
-  makeExpr(["x", "+", ["x", "*", "y"]], mulCommProofExpVariableMap),
+  "Inf",
+  [
+    "Refl",
+    ["Inf", ["Nat"]],
+    makeExpr(["x", "+", ["x", "*", "y"]], mulCommProofExpVariableMap),
+  ],
 ];
 test("check mulCommProofExp1", () => {
   checkExp(mulCommProofExp1, [

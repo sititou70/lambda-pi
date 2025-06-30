@@ -94,9 +94,12 @@ const eqSymProof: TermCheckable = [
             [
               "Lam", // arg: z
               [
-                "Refl",
-                ["Inf", ["Bound", 4]], // a
-                ["Inf", ["Bound", 0]], // z
+                "Inf",
+                [
+                  "Refl",
+                  ["Inf", ["Bound", 4]], // a
+                  ["Inf", ["Bound", 0]], // z
+                ],
               ],
             ],
             // EqElim_x

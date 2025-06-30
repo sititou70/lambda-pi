@@ -38,7 +38,7 @@ const plusCommBaseProof: TermCheckable = [
         ),
       ],
       // NatElim_propZero
-      ["Refl", ["Inf", ["Nat"]], ["Inf", ["Zero"]]],
+      ["Inf", ["Refl", ["Inf", ["Nat"]], ["Inf", ["Zero"]]]],
       // NatElim_propSucc
       [
         "Lam", // arg: y
@@ -60,9 +60,12 @@ const plusCommBaseProof: TermCheckable = [
             makeExpr([0, "+", "y"], new Map([["y", ["Inf", ["Bound", 1]]]])),
             makeExpr(["y", "+", 0], new Map([["y", ["Inf", ["Bound", 1]]]])),
             [
-              "Refl",
-              ["Inf", ["Nat"]],
-              makeExpr(["S", "y"], new Map([["y", ["Inf", ["Bound", 1]]]])),
+              "Inf",
+              [
+                "Refl",
+                ["Inf", ["Nat"]],
+                makeExpr(["S", "y"], new Map([["y", ["Inf", ["Bound", 1]]]])),
+              ],
             ],
             // y + 0 = 0 + y
             makeApplyExpr(
@@ -216,9 +219,12 @@ const plusCommInductionExpVariableMapWithTarget: VariableMap = new Map([
 ]);
 
 const plusCommInductionExp1: TermCheckable = [
-  "Refl",
-  ["Inf", ["Nat"]],
-  makeExpr(["S", [["S", "x"], "+", "y"]], plusCommInductionExpVariableMap),
+  "Inf",
+  [
+    "Refl",
+    ["Inf", ["Nat"]],
+    makeExpr(["S", [["S", "x"], "+", "y"]], plusCommInductionExpVariableMap),
+  ],
 ];
 test("check plusCommInductionExp1", () => {
   checkExp(plusCommInductionExp1, [

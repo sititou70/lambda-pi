@@ -10,6 +10,7 @@ export type TermInferable =
   | ["Zero"]
   | ["Succ", TermCheckable]
   | ["Eq", TermCheckable, TermCheckable, TermCheckable]
+  | ["Refl", TermCheckable, TermCheckable]
   | [
       "EqElim",
       TermCheckable,
@@ -20,10 +21,7 @@ export type TermInferable =
       TermCheckable
     ];
 
-export type TermCheckable =
-  | ["Inf", TermInferable]
-  | ["Lam", TermCheckable]
-  | ["Refl", TermCheckable, TermCheckable];
+export type TermCheckable = ["Inf", TermInferable] | ["Lam", TermCheckable];
 
 export type Name = ["Global", string] | ["Local", number] | ["Quote", number];
 
@@ -61,12 +59,6 @@ export const isEqTermCheckable =
     }
     if (term1[0] === "Lam" && term2[0] === "Lam") {
       return isEqTermCheckable(term1[1])(term2[1]);
-    }
-    if (term1[0] === "Refl" && term2[0] === "Refl") {
-      return (
-        isEqTermCheckable(term1[1])(term2[1]) &&
-        isEqTermCheckable(term1[2])(term2[2])
-      );
     }
 
     return false;
@@ -124,6 +116,12 @@ export const isEqTermInferable =
         isEqTermCheckable(term1[1])(term2[1]) &&
         isEqTermCheckable(term1[2])(term2[2]) &&
         isEqTermCheckable(term1[3])(term2[3])
+      );
+    }
+    if (term1[0] === "Refl" && term2[0] === "Refl") {
+      return (
+        isEqTermCheckable(term1[1])(term2[1]) &&
+        isEqTermCheckable(term1[2])(term2[2])
       );
     }
     if (term1[0] === "EqElim" && term2[0] === "EqElim") {

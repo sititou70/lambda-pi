@@ -40,7 +40,7 @@ const plusZeroLType: TermCheckable = [
 ];
 const plusZeroLProof: TermCheckable = [
   "Lam", // arg: n
-  ["Refl", ["Inf", ["Nat"]], ["Inf", ["Bound", 0]]],
+  ["Inf", ["Refl", ["Inf", ["Nat"]], ["Inf", ["Bound", 0]]]],
 ];
 export const plusZeroLAnn: TermInferable = [
   "Ann",

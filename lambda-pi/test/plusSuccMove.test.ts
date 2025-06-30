@@ -52,13 +52,16 @@ const plusSuccMoveProof: TermCheckable = [
         ],
         // NatElim_propZero
         [
-          "Refl",
-          ["Inf", ["Nat"]],
+          "Inf",
           [
-            "Inf",
+            "Refl",
+            ["Inf", ["Nat"]],
             [
-              "Succ",
-              ["Inf", ["Bound", 0]], // y
+              "Inf",
+              [
+                "Succ",
+                ["Inf", ["Bound", 0]], // y
+              ],
             ],
           ],
         ],
@@ -96,15 +99,18 @@ const plusSuccMoveProof: TermCheckable = [
                 ])
               ),
               [
-                "Refl",
-                ["Inf", ["Nat"]],
-                makeExpr(
-                  [["S", "x"], "+", ["S", "y"]],
-                  new Map([
-                    ["x", ["Inf", ["Bound", 1]]],
-                    ["y", ["Inf", ["Bound", 2]]],
-                  ])
-                ),
+                "Inf",
+                [
+                  "Refl",
+                  ["Inf", ["Nat"]],
+                  makeExpr(
+                    [["S", "x"], "+", ["S", "y"]],
+                    new Map([
+                      ["x", ["Inf", ["Bound", 1]]],
+                      ["y", ["Inf", ["Bound", 2]]],
+                    ])
+                  ),
+                ],
               ],
               ["Inf", ["Bound", 0]] // (Succ x) + y = x + (Succ y)
             ),

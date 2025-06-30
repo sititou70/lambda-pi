@@ -43,7 +43,7 @@ export const quote =
     }
     if (value[0] === "VRefl") {
       const [_, a, z] = value;
-      return ["Refl", quote(index)(a), quote(index)(z)];
+      return ["Inf", ["Refl", quote(index)(a), quote(index)(z)]];
     }
 
     return value satisfies never;
