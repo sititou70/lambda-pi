@@ -1,4 +1,4 @@
-import { TermCheckable } from "../types";
+import { TermCheckable, TermInferable } from "../types";
 import { makeNat } from "./makeNat";
 import { mulAnn } from "./mul.test";
 import { plusAnn } from "./plus.test";
@@ -74,3 +74,14 @@ export const makeEqExpr = (
     ],
   ];
 };
+
+export const makeApplyExpr = (
+  operator: TermInferable,
+  ...operands: TermCheckable[]
+): TermCheckable => [
+  "Inf",
+  operands.reduce(
+    (termInferable, operand) => [termInferable, ":@:", operand],
+    operator
+  ),
+];

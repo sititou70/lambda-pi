@@ -2,8 +2,7 @@ import { test } from "vitest";
 import { TermCheckable, TermInferable } from "../types";
 import { typeInferable } from "../checker";
 import { makeNat } from "./makeNat";
-import { makeEqExpr, makeExpr } from "./makeExpr";
-import { makeApplyExpr } from "./apply";
+import { makeApplyExpr, makeEqExpr, makeExpr } from "./makeExpr";
 import { eqIndRAnn } from "./eqIndR.test";
 
 // forall (n: mynat),
