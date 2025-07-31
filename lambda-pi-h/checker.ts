@@ -25,9 +25,9 @@ export const typeInferable =
       if (DEBUG) console.log(++DEBUG_STEP, "Start: Ann");
       const [_, exp, type] = term;
       typeCheckable(index)(context)(type)(["VStar", "any"]);
-      const evaluetedType = evalCheckable(type)([]);
-      typeCheckable(index)(context)(exp)(evaluetedType);
-      return evaluetedType;
+      const evaluatedType = evalCheckable(type)([]);
+      typeCheckable(index)(context)(exp)(evaluatedType);
+      return evaluatedType;
     }
     if (term[0] === "Star") {
       if (DEBUG) console.log(++DEBUG_STEP, "Start: Star");
@@ -49,13 +49,13 @@ export const typeInferable =
           inferredTypeType,
         };
 
-      const evaluetedType = evalInferable(type)([]);
+      const evaluatedType = evalInferable(type)([]);
 
       const substitutedBody = substInferable(0)(["Free", ["Local", index]])(
         body
       );
       const inferredBodyType = typeInferable(index + 1)([
-        [["Local", index], evaluetedType],
+        [["Local", index], evaluatedType],
         ...context,
       ])(substitutedBody);
       if (inferredBodyType[0] !== "VStar")

@@ -10,25 +10,25 @@ export const vapp =
       return func(v2);
     }
     if (v1[0] === "VStar") {
-      throw { msg: "illgal application: v1 is VSter", v1, v2 };
+      throw { msg: "illegal application: v1 is VSter", v1, v2 };
     }
     if (v1[0] === "VPi") {
-      throw { msg: "illgal application: v1 is VPi", v1, v2 };
+      throw { msg: "illegal application: v1 is VPi", v1, v2 };
     }
     if (v1[0] === "VNat") {
-      throw { msg: "illgal application: v1 is VNat", v1, v2 };
+      throw { msg: "illegal application: v1 is VNat", v1, v2 };
     }
     if (v1[0] === "VZero") {
-      throw { msg: "illgal application: v1 is VZero", v1, v2 };
+      throw { msg: "illegal application: v1 is VZero", v1, v2 };
     }
     if (v1[0] === "VSucc") {
-      throw { msg: "illgal application: v1 is VSucc", v1, v2 };
+      throw { msg: "illegal application: v1 is VSucc", v1, v2 };
     }
     if (v1[0] === "VEq") {
-      throw { msg: "illgal application: v1 is VEq", v1, v2 };
+      throw { msg: "illegal application: v1 is VEq", v1, v2 };
     }
     if (v1[0] === "VRefl") {
-      throw { msg: "illgal application: v1 is VRefl", v1, v2 };
+      throw { msg: "illegal application: v1 is VRefl", v1, v2 };
     }
     if (v1[0] === "VNeutral") {
       const [_, neutral] = v1;

@@ -82,7 +82,7 @@ export const typeInferable =
       const exp2 = term[2];
       const type1 = typeInferable(index)(context)(exp1);
       if (type1[0] !== "Fun")
-        throw { msg: "illigal application", index, context, term };
+        throw { msg: "illegal application", index, context, term };
       const type1Arg = type1[1];
       const type1Ret = type1[2];
       typeCheckable(index)(context)(exp2)(type1Arg);
